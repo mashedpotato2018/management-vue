@@ -1,0 +1,128 @@
+<template>
+  <div class="app-container">
+    <div class="filter-container">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <el-input
+            v-model="listQuery.id"
+            placeholder="id"
+            style="width: 200px;"
+            class="filter-item"
+            @keyup.enter.native="handleFilter"
+          />
+          <el-input
+            v-model="listQuery.NickName"
+            placeholder="昵称"
+            style="width: 200px;"
+            class="filter-item"
+            @keyup.enter.native="handleFilter"
+          />
+          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            查询
+          </el-button>
+        </div>
+        <div>
+          <el-table
+            :data="list"
+            border
+            style="width: 100%"
+            max-height="580"
+            row-key="id"
+            lazy
+            :load="load"
+          >
+            <el-table-column
+              fixed
+              prop="id"
+              label="用户ID"
+            />
+            <el-table-column
+              prop="NickName"
+              label="昵称"
+            />
+            <el-table-column
+              prop="SubPlayerTotal"
+              label="下级玩家总数"
+            />
+            <el-table-column
+              prop="WinningLosingTotal"
+              label="名下玩家输赢统计"
+            />
+            <el-table-column
+              prop="profitTotal"
+              label="代理所得红利"
+            />
+            <el-table-column
+              prop="ProvideProfits"
+              label="下级提供利润"
+            />
+          </el-table>
+          <pagination
+            v-show="total>0"
+            :total="total"
+            :page.sync="listQuery.page"
+            :limit.sync="listQuery.limit"
+            @pagination="getList"
+          />
+        </div>
+      </el-card>
+    </div>
+  </div>
+</template>
+
+<script>
+import { fetchList } from '@/api/proxy'
+import waves from '@/directive/waves' // waves directive
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
+export default {
+  name: 'ComplexTable',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    }
+  },
+  data() {
+    return {
+      list: null,
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        id: '',
+        NickName: '',
+        parentId: 0
+      },
+      downloadLoading: false
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      fetchList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    load(tree, treeNode, resolve) {
+      const parentId = treeNode.rowKey
+      var treeQuery = { parentId }
+      fetchList(treeQuery).then(response => {
+        resolve(response.data.items)
+      })
+    }
+  }
+}
+</script>
