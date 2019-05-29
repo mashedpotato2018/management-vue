@@ -1,5 +1,5 @@
 module.exports = {
-  title: '数据中心',
+  title: '管理后台',
 
   /**
    * @type {boolean} true | false
@@ -11,7 +11,7 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether need tagsView
    */
-  tagsView: true,
+  tagsView: false,
 
   /**
    * @type {boolean} true | false

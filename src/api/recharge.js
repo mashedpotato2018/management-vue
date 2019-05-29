@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+// 充值记录
+export function fetchList(data) {
   return request({
     url: '/recharge/list',
     method: 'get',
-    params: query
+    params: data
   })
 }
