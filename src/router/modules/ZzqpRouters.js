@@ -8,7 +8,7 @@ const KxmRouters = [
     children: [
       {
         path: 'player',
-        component: () => import('@/views/Kxm/player/index'),
+        component: () => import('@/views/ZZQP/player/index'),
         name: 'player',
         meta: { title: '玩家管理', icon: 'peoples', affix: true }
       }
@@ -23,19 +23,19 @@ const KxmRouters = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/Kxm/Champions/list'),
+        component: () => import('@/views/ZZQP/Champions/list'),
         name: 'list',
         meta: { title: '盟主列表' }
       },
       {
         path: 'set',
-        component: () => import('@/views/Kxm/Champions/set'),
+        component: () => import('@/views/ZZQP/Champions/set'),
         name: 'set',
         meta: { title: '盟主管理' }
       },
       {
         path: 'changePassword',
-        component: () => import('@/views/Kxm/Champions/changePassword'),
+        component: () => import('@/views/ZZQP/Champions/changePassword'),
         name: 'changePassword',
         meta: { title: '修改面密码' },
         hidden: true
