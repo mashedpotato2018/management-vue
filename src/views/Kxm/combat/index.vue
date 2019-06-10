@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
+        <div>
           <el-input
             v-model="listQuery.id"
             placeholder="id"
@@ -21,11 +21,13 @@
             查询
           </el-button>
         </div>
+      </el-card>
+      <el-card v-show="isShow" class="box-card" style="margin-top: 20px;">
         <div>
           <el-table
-            :data="list"
+            :data="basic"
             border
-            style="width: 100%"
+            style="width: 100%;margin-bottom: 20px;"
             max-height="580"
           >
             <el-table-column
@@ -48,15 +50,34 @@
             <el-table-column
               prop="Money"
               label="剩余金币"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.Money|toThousandFilter}}
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-table
+            :data="list"
+            border
+            style="width: 100%"
+            max-height="580"
+          >
             <el-table-column
               prop="startTime"
               label="开始时间"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.startTime|DateFormat|parseTime}}
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="winMoney"
+              prop="TotalWinLose"
               label="输赢金币"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.TotalWinLose|toThousandFilter}}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="GameName"
               label="所在游戏"
@@ -80,6 +101,7 @@ import { combatQuery } from '@/api/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { toThousandFilter } from '@/filters'
 
 export default {
   name: 'ComplexTable',
@@ -100,7 +122,9 @@ export default {
   },
   data() {
     return {
-      list: null,
+      list: [],
+      basic:[],
+      isShow:false,
       total: 0,
       listLoading: true,
       listQuery: {
@@ -112,14 +136,12 @@ export default {
       downloadLoading: false
     }
   },
-  created() {
-    this.getList()
-  },
   methods: {
     getList() {
       this.listLoading = true
       combatQuery(this.listQuery).then(response => {
         this.list = response.data.items
+        this.basic = response.data.basic
         this.total = response.data.total
         this.listLoading = false
       })
@@ -127,6 +149,11 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    }
+  },
+  watch:{
+    basic(newVal){
+      this.isShow = newVal.length>0
     }
   }
 }

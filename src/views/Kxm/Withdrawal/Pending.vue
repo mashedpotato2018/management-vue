@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
+        <div>
           <el-input
             v-model="listQuery.id"
             placeholder="id"
@@ -21,6 +21,8 @@
             查询
           </el-button>
         </div>
+      </el-card>
+      <el-card style="margin-top: 20px;" class="box-card">
         <div>
           <el-table
             :data="list"
@@ -53,32 +55,30 @@
             <el-table-column
               prop="Material"
               label="申请提现资料"
-              width="600px"
+              width="600px;"
               align="left"
             />
             <el-table-column
               prop="ApplicationTime"
               label="申请时间"
-              width="200px;"
               align="center"
             />
             <el-table-column
-              prop="state"
-              label="处理结果"
+              fixed="right"
+              label="操作"
+              width="100"
               align="center"
             >
-              <template slot-scope="{row}">
-                <el-tag :type="row.state | statusFilter">
-                  {{ row.state | typeFilter }}
-                </el-tag>
+              <template slot-scope="scope">
+                <el-button
+                  type="primary"
+                  size="small"
+                  @click="handleUpdate(scope.row)"
+                >
+                  处理
+                </el-button>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="HandlingTime"
-              label="处理时间"
-              width="200px;"
-              align="center"
-            />
           </el-table>
           <pagination
             v-show="total>0"
@@ -90,11 +90,40 @@
         </div>
       </el-card>
     </div>
+    <el-dialog
+      title="处理"
+      :visible.sync="dialogFormVisible"
+    >
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+      >
+        <el-form-item
+          label="处理结果"
+          prop="type"
+        >
+          <el-select v-model="temp.state" class="filter-item" placeholder="请选择">
+            <el-option label="同意" :value="1" />
+            <el-option label="拒绝" :value="2" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="updateData()">
+          提交
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { RecordList } from '@/api/withdrawal'
+import { pendingList, UpdateWithdrawal } from '@/api/withdrawal'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -106,22 +135,11 @@ export default {
   filters: {
     DateFormat(str) {
       return parseInt(str.substr(6, 13))
-    },
-    typeFilter(val) {
-      const type = { 1: '同意', 2: '拒绝' }
-      return type[val]
-    },
-    statusFilter(status) {
-      const statusMap = {
-        1: 'success',
-        2: 'danger'
-      }
-      return statusMap[status]
     }
   },
   data() {
     return {
-      list: null,
+      list: [],
       total: 0,
       listLoading: true,
       listQuery: {
@@ -130,7 +148,14 @@ export default {
         id: '',
         NickName: ''
       },
-      downloadLoading: false
+      downloadLoading: false,
+      dialogFormVisible: false,
+      rules: {
+        state: [{ required: true, message: '处理结果为必须项', trigger: 'change' }]
+      },
+      temp: {
+        state: 1
+      }
     }
   },
   created() {
@@ -139,7 +164,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      RecordList(this.listQuery).then(response => {
+      pendingList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -148,7 +173,36 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleUpdate(index, row) {
+      this.temp = Object.assign({}, row)
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          UpdateWithdrawal(tempData).then(() => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '处理成功',
+              type: '成功',
+              duration: 2000
+            })
+            this.$router.push('/WithdrawalRecord/Record')
+          })
+        }
+      })
     }
   }
 }
 </script>
+<style scoped>
+  >>>.el-dialog{
+    width: 400px;
+  }
+</style>

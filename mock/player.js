@@ -28,7 +28,7 @@ for (let i = 0; i < count; i++) {
       HeadImg: ImgUrl,
       Money: '@integer(60, 10000)',
       startTime: '@date("yyyy-MM-dd HH:mm:ss")',
-      winMoney: '@integer(60, 200)',
+      TotalWinLose: '@integer(60, 200)',
       'GameName|1': [
         '斗地主',
         '龙虎斗',
@@ -41,7 +41,7 @@ for (let i = 0; i < count; i++) {
 
 for (let i = 0; i < count; i++) {
   HallWater.push(Mock.mock({
-    DateTime: new Date(new Date().getTime() - 24 * 60 * 60 * 1000 * i),
+    Date: new Date(new Date().getTime() - 24 * 60 * 60 * 1000 * i),
     'GameName|1': [
       '斗地主',
       '龙虎斗',
@@ -51,7 +51,7 @@ for (let i = 0; i < count; i++) {
     WinTotal: '@integer(60, 10000)'
   }))
 }
-HallWater.sort((before, after) => before.DateTime.getTime() - after.DateTime.getTime())
+HallWater.sort((before, after) => before.Date.getTime() - after.Date.getTime())
 
 for (let i = 0; i < count; i++) {
   GivingRecords.push(Mock.mock({
@@ -122,7 +122,8 @@ export default [
         code: 20000,
         data: {
           total: mockList.length,
-          items: pageList
+          items: pageList,
+          basic: [pageList[0]]||[]
         }
       }
     }
@@ -134,8 +135,8 @@ export default [
       // const { bTime, eTime, page = 1, limit = 10 } = config.query
       const { bTime, eTime } = config.query
       const mockList = HallWater.filter(item => {
-        if (bTime) return item.DateTime.getTime() > new Date(bTime).getTime()
-        if (eTime) return item.DateTime.getTime() > new Date(eTime).getTime()
+        if (bTime) return item.Date.getTime() > new Date(bTime).getTime()
+        if (eTime) return item.Date.getTime() > new Date(eTime).getTime()
         return true
       })
 
@@ -185,7 +186,7 @@ export default [
       })
       if (parseInt(sortType) === 0) mockList.reverse()
       const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-
+      PlayersCrunchies
       return {
         code: 20000,
         data: {

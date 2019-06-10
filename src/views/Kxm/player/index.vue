@@ -2,31 +2,31 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <el-input
-            v-model="listQuery.id"
-            placeholder="id"
-            style="width: 200px;"
-            class="filter-item"
-            @keyup.enter.native="handleFilter"
-          />
-          <el-input
-            v-model="listQuery.NickName"
-            placeholder="昵称"
-            style="width: 200px;"
-            class="filter-item"
-            @keyup.enter.native="handleFilter"
-          />
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            查询
-          </el-button>
-        </div>
+        <el-input
+          v-model="listQuery.id"
+          placeholder="id"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="handleFilter"
+        />
+        <el-input
+          v-model="listQuery.NickName"
+          placeholder="昵称"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="handleFilter"
+        />
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          查询
+        </el-button>
+      </el-card>
+      <el-card class="box-card" style="margin-top: 20px;">
         <div>
           <el-table
             :data="list"
             border
             style="width: 100%"
-            max-height="580"
+            max-height="560"
           >
             <el-table-column
               fixed
@@ -48,7 +48,11 @@
             <el-table-column
               prop="Money"
               label="剩余金币"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.Money|toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="ProxyID"
               label="上级代理ID"
@@ -56,11 +60,19 @@
             <el-table-column
               prop="RegisterTime"
               label="注册时间"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.RegisterTime|DateFormat|parseTime }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="LastLoginTime"
               label="最后登录时间"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.LastLoginTime|DateFormat|parseTime }}
+              </template>
+            </el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -79,6 +91,7 @@
 import { fetchList } from '@/api/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {

@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
+        <div>
           <el-date-picker
             v-model="listQuery.bTime"
             align="right"
@@ -28,6 +28,8 @@
             查询
           </el-button>
         </div>
+      </el-card>
+      <el-card style="margin-top: 20px;" class="box-card">
         <div>
           <chart
             id="LineChart"
@@ -54,11 +56,8 @@ export default {
   data() {
     return {
       list: null,
-      total: 0,
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 10,
         bTime: parseTime(new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7)),
         eTime: new Date()
       },
@@ -98,7 +97,6 @@ export default {
       this.listLoading = true
       HallWater(this.listQuery).then(response => {
         this.list = response.data.items
-        this.total = response.data.total
         this.listLoading = false
       })
     },

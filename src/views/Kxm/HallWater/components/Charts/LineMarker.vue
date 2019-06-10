@@ -45,7 +45,7 @@ export default {
       this.crossList = []
       this.lengthList = []
       this.list.forEach(item => {
-        this.crossList.push(parseTime(item.DateTime, '{y}-{m}-{d}'))
+        this.crossList.push(parseTime(this.DateFormat(item.Date), '{y}-{m}-{d}'))
         this.lengthList.push(item.WinTotal)
       })
       this.initChart()
@@ -60,6 +60,9 @@ export default {
     this.chart = null
   },
   methods: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    },
     initChart() {
       this.chart = echarts.init(document.getElementById(this.id))
       this.chart.setOption({

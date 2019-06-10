@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
+        <div>
           <el-input
             v-model="listQuery.id"
             placeholder="id"
@@ -21,15 +21,22 @@
             查询
           </el-button>
         </div>
+      </el-card>
+      <el-card style="margin-top: 20px;" class="box-card">
         <div>
           <el-table
             :data="list"
             border
             style="width: 100%"
             max-height="580"
+            @sort-change="sortChange"
           >
             <el-table-column
               fixed
+              prop="ranking"
+              label="排名"
+            />
+            <el-table-column
               prop="id"
               label="用户ID"
             />
@@ -38,12 +45,9 @@
               label="昵称"
             />
             <el-table-column
-              prop="RechargeMoney"
-              label="充值金额"
-            />
-            <el-table-column
-              prop="RechargeTime"
-              label="充值时间"
+              prop="WinMoney"
+              label="赢金币"
+              sortable="custom"
             />
           </el-table>
           <pagination
@@ -60,28 +64,14 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/recharge'
+import { PlayersCrunchies } from '@/api/player'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
   name: 'ComplexTable',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    DateFormat(str) {
-      return parseInt(str.substr(6, 13))
-    },
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       list: null,
@@ -91,7 +81,8 @@ export default {
         page: 1,
         limit: 10,
         id: '',
-        NickName: ''
+        NickName: '',
+        sortType: 1
       },
       downloadLoading: false
     }
@@ -102,7 +93,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      PlayersCrunchies(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -111,6 +102,16 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    sortChange(data) {
+      const { prop, order } = data
+      this.sortByID(prop, order)
+    },
+    sortByID(column, order) {
+      const type = { ascending: 0, descending: 1 }
+      this.listQuery.sort = column
+      this.listQuery.sortType = type[order]
+      this.handleFilter()
     }
   }
 }

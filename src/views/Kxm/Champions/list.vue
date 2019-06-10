@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
+        <div>
           <el-input
             v-model="listQuery.account"
             placeholder="代理商账号"
@@ -35,6 +35,8 @@
             查询
           </el-button>
         </div>
+      </el-card>
+      <el-card style="margin-top: 20px;" class="box-card">
         <div>
           <el-table
             :data="list"

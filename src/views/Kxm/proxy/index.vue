@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
+        <div>
           <el-input
             v-model="listQuery.id"
             placeholder="id"
@@ -21,6 +21,8 @@
             查询
           </el-button>
         </div>
+      </el-card>
+      <el-card class="box-card" style="margin-top: 20px;">
         <div>
           <el-table
             :data="list"
@@ -43,19 +45,35 @@
             <el-table-column
               prop="SubPlayerTotal"
               label="下级玩家总数"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.SubPlayerTotal|toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="WinningLosingTotal"
               label="名下玩家输赢统计"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.WinningLosingTotal|toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="profitTotal"
               label="代理所得红利"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.profitTotal|toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="ProvideProfits"
               label="下级提供利润"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.ProvideProfits|toThousandFilter }}
+              </template>
+            </el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -74,6 +92,7 @@
 import { fetchList } from '@/api/proxy'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {

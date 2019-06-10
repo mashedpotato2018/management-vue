@@ -5,9 +5,11 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: 'http://39.98.188.43:6061', // url = base url + request url
+  baseURL: 'http://localhost:53803/KXM/', // url = base url + request url
   withCredentials: false, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 50000 // request timeout
 })
 // request interceptor
 service.interceptors.request.use(
@@ -45,7 +47,7 @@ service.interceptors.response.use(
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {
       Message({
-        message: res.message || 'error',
+        message: res.Message || 'error',
         type: 'error',
         duration: 5 * 1000
       })
@@ -63,7 +65,7 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(res.message || 'error')
+      return Promise.reject(res.Message || 'error')
     } else {
       return res
     }
@@ -71,7 +73,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      message: error.Message,
       type: 'error',
       duration: 5 * 1000
     })
