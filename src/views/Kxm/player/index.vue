@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/player'
+import { fetchList } from '@/api/KXM/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import { toThousandFilter } from '@/filters'

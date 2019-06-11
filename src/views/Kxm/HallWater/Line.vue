@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { HallWater } from '@/api/player'
+import { HallWater } from '@/api/KXM/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Chart from './components/Charts/LineMarker'

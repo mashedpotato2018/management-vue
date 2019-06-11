@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { PlayersCrunchies } from '@/api/player'
+import { PlayersCrunchies } from '@/api/KXM/player'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 

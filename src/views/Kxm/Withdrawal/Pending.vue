@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { pendingList, UpdateWithdrawal } from '@/api/withdrawal'
+import { pendingList, UpdateWithdrawal } from '@/api/KXM/withdrawal'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination

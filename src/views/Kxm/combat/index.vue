@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { combatQuery } from '@/api/player'
+import { combatQuery } from '@/api/KXM/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination

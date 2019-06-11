@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/proxy'
+import { fetchList } from '@/api/KXM/proxy'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import { toThousandFilter } from '@/filters'

@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { RecordList } from '@/api/withdrawal'
+import { RecordList } from '@/api/KXM/withdrawal'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination

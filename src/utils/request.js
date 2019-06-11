@@ -5,9 +5,10 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // baseURL: 'http://39.98.188.43:6061', // url = base url + request url
-  baseURL: 'http://localhost:53803/KXM/', // url = base url + request url
+  // baseURL: 'http://localhost:53803/KXM/', // url = base url + request url
+  // baseURL: 'http://localhost:53803/ZZQP/', // url = base url + request url
   withCredentials: false, // send cookies when cross-domain requests
   timeout: 50000 // request timeout
 })
