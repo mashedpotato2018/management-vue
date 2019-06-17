@@ -8,7 +8,7 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import KxmRouters from './modules/KxmRouters'
-
+import ZzqpRouters from './modules/ZzqpRouters'
 export const constantRoutes = [
   {
     path: '/redirect',
@@ -41,7 +41,8 @@ export const constantRoutes = [
     component: () => import('@/views/base/error-page/401'),
     hidden: true
   },
-  ...KxmRouters
+  // ...KxmRouters
+  ...ZzqpRouters
 ]
 
 /**

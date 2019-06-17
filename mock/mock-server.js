@@ -7,7 +7,11 @@ const mockDir = path.join(process.cwd(), 'mock')
 
 function registerRoutes(app) {
   let mockLastIndex
-  const { default: mocks } = require('./index.js')
+  // 凯旋门
+  // const { default: mocks } = require('./KXM/index.js')
+
+  // 至尊
+  const { default: mocks } = require('./Zzqp/index.js')
   for (const mock of mocks) {
     app[mock.type](mock.url, mock.response)
     mockLastIndex = app._router.stack.length
