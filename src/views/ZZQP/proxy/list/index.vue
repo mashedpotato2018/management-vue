@@ -5,7 +5,7 @@
         <div>
           <el-input
             v-model="listQuery.keyword"
-            placeholder="用户id/昵称"
+            placeholder="id/昵称"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
@@ -15,7 +15,7 @@
           </el-button>
         </div>
       </el-card>
-      <el-card style="margin-top: 20px;" class="box-card">
+      <el-card class="box-card" style="margin-top: 20px;">
         <div>
           <el-table
             :data="list"
@@ -25,8 +25,8 @@
           >
             <el-table-column
               fixed
-              prop="UserId"
-              label="用户ID"
+              prop="id"
+              label="代理id"
             />
             <el-table-column
               prop="NickName"
@@ -35,50 +35,34 @@
             <el-table-column
               prop="HeadImg"
               label="头像"
-             align="center"
+              align="center"
             >
               <template slot-scope="scope">
                 <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
               </template>
             </el-table-column>
             <el-table-column
-              prop="Money"
-              label="珍珠数"
+              prop="Alliance"
+              label="所属盟主"
+            />
+            <el-table-column
+              prop="SubProxyTotal"
+              label="下级代理总数"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                <router-link class="primary-link" :to="{name:'proxy-list-detail',params:scope.row}" tag="a">
+                  {{ scope.row.SubProxyTotal|toThousandFilter }}
+                </router-link>
               </template>
             </el-table-column>
             <el-table-column
-              prop="RegisterTime"
-              label="注册时间"
+              prop="SubPlayerTotal"
+              label="所属玩家总数"
             >
               <template slot-scope="scope">
-                {{ scope.row.RegisterTime | DateFormat | parseTime }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="YesterdayMoney"
-              label="昨天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.YesterdayMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="WeekMoney"
-              label="近7天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.WeekMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="MonthMoney"
-              label="近30天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.MonthMoney | toThousandFilter }}
+                <router-link class="primary-link" :to="{name:'player-list-detail',params:scope.row}" tag="a">
+                  {{ scope.row.SubPlayerTotal|toThousandFilter }}
+                </router-link>
               </template>
             </el-table-column>
           </el-table>
@@ -96,10 +80,10 @@
 </template>
 
 <script>
-  import { statistics } from '@/api/Zzqp/player'
+  import { fetchList } from '@/api/Zzqp/proxy'
   import waves from '@/directive/waves' // waves directive
-  import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
+  import { toThousandFilter } from '@/filters'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
   export default {
@@ -113,7 +97,7 @@
     },
     data() {
       return {
-        list: [],
+        list: null,
         total: 0,
         listLoading: true,
         listQuery: {
@@ -130,7 +114,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        statistics(this.listQuery).then(response => {
+        fetchList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false
@@ -143,3 +127,24 @@
     }
   }
 </script>
+<style scoped>
+  .primary-link:hover{
+    color: #66b1ff;
+    text-decoration: underline;
+  }
+  .primary-link {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    position: relative;
+    color: #409eff;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+</style>

@@ -21,7 +21,7 @@
             :data="list"
             border
             style="width: 100%"
-            max-height="550"
+            max-height="580"
           >
             <el-table-column
               fixed
@@ -33,28 +33,12 @@
               label="昵称"
             />
             <el-table-column
-              prop="HeadImg"
-              label="头像"
-             align="center"
-            >
-              <template slot-scope="scope">
-                <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
-              </template>
-            </el-table-column>
-            <el-table-column
               prop="Money"
-              label="珍珠数"
+              label="收益贡献"
+              align="center"
             >
               <template slot-scope="scope">
                 {{ scope.row.Money | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="RegisterTime"
-              label="注册时间"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.RegisterTime | DateFormat | parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -96,7 +80,7 @@
 </template>
 
 <script>
-  import { statistics } from '@/api/Zzqp/player'
+  import { proxyYield } from '@/api/Zzqp/proxy'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
@@ -130,7 +114,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        statistics(this.listQuery).then(response => {
+        proxyYield(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false

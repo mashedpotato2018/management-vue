@@ -15,13 +15,13 @@
           </el-button>
         </div>
       </el-card>
-      <el-card style="margin-top: 20px;" class="box-card">
+      <el-card v-show="isShow" class="box-card" style="margin-top: 20px;">
         <div>
           <el-table
-            :data="list"
+            :data="basic"
             border
-            style="width: 100%"
-            max-height="550"
+            style="width: 100%;margin-bottom: 20px;"
+            max-height="580"
           >
             <el-table-column
               fixed
@@ -35,18 +35,9 @@
             <el-table-column
               prop="HeadImg"
               label="头像"
-             align="center"
             >
               <template slot-scope="scope">
                 <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="Money"
-              label="珍珠数"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -54,31 +45,38 @@
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{ scope.row.RegisterTime | DateFormat | parseTime }}
+                {{scope.row.RegisterTime|parseTime}}
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-table
+            :data="list"
+            border
+            style="width: 100%"
+            max-height="410"
+          >
+            <el-table-column
+              type="index"
+              label="序号"
+              align="center"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="startTime"
+              label="开始时间"
+            >
+              <template slot-scope="scope">
+                {{scope.row.startTime|parseTime}}
               </template>
             </el-table-column>
             <el-table-column
-              prop="YesterdayMoney"
-              label="昨天"
+              align="center"
+              prop="TotalWinLose"
+              label="输赢珍珠数"
             >
               <template slot-scope="scope">
-                {{ scope.row.YesterdayMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="WeekMoney"
-              label="近7天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.WeekMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="MonthMoney"
-              label="近30天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.MonthMoney | toThousandFilter }}
+                {{scope.row.TotalWinLose|toThousandFilter}}
               </template>
             </el-table-column>
           </el-table>
@@ -96,11 +94,11 @@
 </template>
 
 <script>
-  import { statistics } from '@/api/Zzqp/player'
+  import { record } from '@/api/Zzqp/player'
   import waves from '@/directive/waves' // waves directive
-  import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+  import { toThousandFilter } from '@/filters'
 
   export default {
     name: 'ComplexTable',
@@ -114,24 +112,24 @@
     data() {
       return {
         list: [],
+        basic:[],
+        isShow:false,
         total: 0,
         listLoading: true,
         listQuery: {
           page: 1,
           limit: 10,
-          keyword: ''
+          keyword:''
         },
         downloadLoading: false
       }
     },
-    created() {
-      this.getList()
-    },
     methods: {
       getList() {
         this.listLoading = true
-        statistics(this.listQuery).then(response => {
+        record(this.listQuery).then(response => {
           this.list = response.data.items
+          this.basic = response.data.basic
           this.total = response.data.total
           this.listLoading = false
         })
@@ -139,6 +137,11 @@
       handleFilter() {
         this.listQuery.page = 1
         this.getList()
+      }
+    },
+    watch:{
+      basic(newVal){
+        this.isShow = newVal.length>0
       }
     }
   }

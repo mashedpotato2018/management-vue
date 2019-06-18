@@ -21,24 +21,23 @@
             :data="list"
             border
             style="width: 100%"
-            max-height="550"
+            max-height="580"
           >
             <el-table-column
               fixed
-              prop="UserId"
-              label="用户ID"
+              prop="id"
+              label="玩家ID"
             />
             <el-table-column
               prop="NickName"
               label="昵称"
             />
             <el-table-column
-              prop="HeadImg"
-              label="头像"
-             align="center"
+              prop="RegisterTime"
+              label="注册时间"
             >
               <template slot-scope="scope">
-                <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
+                {{ scope.row.RegisterTime | parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -47,38 +46,6 @@
             >
               <template slot-scope="scope">
                 {{ scope.row.Money | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="RegisterTime"
-              label="注册时间"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.RegisterTime | DateFormat | parseTime }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="YesterdayMoney"
-              label="昨天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.YesterdayMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="WeekMoney"
-              label="近7天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.WeekMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="MonthMoney"
-              label="近30天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.MonthMoney | toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>
@@ -96,7 +63,7 @@
 </template>
 
 <script>
-  import { statistics } from '@/api/Zzqp/player'
+  import { fetchList } from '@/api/Zzqp/proxy'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
@@ -119,18 +86,23 @@
         listQuery: {
           page: 1,
           limit: 10,
+          parentId: 0,
           keyword: ''
         },
         downloadLoading: false
       }
     },
     created() {
+      if (!this.$route.params.id) {
+        this.$router.push('/proxy/list')
+      }
+      this.listQuery.parentId = this.$route.params.id
       this.getList()
     },
     methods: {
       getList() {
         this.listLoading = true
-        statistics(this.listQuery).then(response => {
+        fetchList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false

@@ -35,7 +35,7 @@
             <el-table-column
               prop="HeadImg"
               label="头像"
-             align="center"
+              align="center"
             >
               <template slot-scope="scope">
                 <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
@@ -43,42 +43,30 @@
             </el-table-column>
             <el-table-column
               prop="Money"
-              label="珍珠数"
+              label="银珍珠"
             >
               <template slot-scope="scope">
                 {{ scope.row.Money | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="RegisterTime"
-              label="注册时间"
+              prop="KingMoney"
+              label="金珍珠"
             >
               <template slot-scope="scope">
-                {{ scope.row.RegisterTime | DateFormat | parseTime }}
+                {{ scope.row.Money | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="YesterdayMoney"
-              label="昨天"
-            >
+              prop="CardNum"
+              label="房卡"
+            />
+            <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
-                {{ scope.row.YesterdayMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="WeekMoney"
-              label="近7天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.WeekMoney | toThousandFilter }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="MonthMoney"
-              label="近30天"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.MonthMoney | toThousandFilter }}
+                <el-button
+                  size="mini"
+                  type="warning"
+                  @click="handleEdit(scope.$index, scope.row)">解封</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -96,7 +84,7 @@
 </template>
 
 <script>
-  import { statistics } from '@/api/Zzqp/player'
+  import { statistics, deblock } from '@/api/Zzqp/player'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
@@ -119,7 +107,8 @@
         listQuery: {
           page: 1,
           limit: 10,
-          keyword: ''
+          keyword: '',
+          state: false
         },
         downloadLoading: false
       }
@@ -135,6 +124,19 @@
           this.total = response.data.total
           this.listLoading = false
         })
+      },
+      handleEdit(){
+        deblock().then(res=>{
+          if(res.code===20000)
+            this.$notify({
+              title: '成功',
+              message: '解封成功',
+              type: '成功',
+              duration: 2000
+            })
+          this.handleFilter()
+        })
+
       },
       handleFilter() {
         this.listQuery.page = 1
