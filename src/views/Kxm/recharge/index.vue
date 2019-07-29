@@ -32,7 +32,7 @@
           >
             <el-table-column
               fixed
-              prop="id"
+              prop="UserID"
               label="用户ID"
             />
             <el-table-column
@@ -42,11 +42,19 @@
             <el-table-column
               prop="RechargeMoney"
               label="充值金额"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.RechargeMoney/100|toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="RechargeTime"
               label="充值时间"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.RechargeTime|DateFormat|parseTime}}
+              </template>
+            </el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -65,6 +73,7 @@
 import { fetchList } from '@/api/base/recharge'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {

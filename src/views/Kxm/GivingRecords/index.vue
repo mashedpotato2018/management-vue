@@ -39,10 +39,10 @@
               prop="GivingNickName"
               label="赠送人昵称"
             />
-            <el-table-column
-              prop="Type"
-              label="类型"
-            />
+            <!--<el-table-column-->
+              <!--prop="Type"-->
+              <!--label="类型"-->
+            <!--/>-->
             <el-table-column
               prop="ByGivingID"
               label="被赠送人ID"
@@ -52,23 +52,19 @@
               label="被赠送人昵称"
             />
             <el-table-column
-              prop="BeforeMoney"
-              label="变更前金额"
-            />
-            <el-table-column
               prop="ChangeMoney"
               label="变更金额"
-            />
-            <el-table-column
-              prop="AfterMoney"
-              label="变更后金额"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.ChangeMoney/100 |toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="ChangeTime"
               label="变更时间"
             >
               <template slot-scope="scope">
-                {{ scope.row.ChangeTime | parseTime }}
+                {{ scope.row.ChangeTime |DateFormat| parseTime }}
               </template>
             </el-table-column>
           </el-table>
@@ -89,6 +85,7 @@
 import { GivingRecords } from '@/api/KXM/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -109,8 +106,7 @@ export default {
         page: 1,
         limit: 10,
         id: '',
-        NickName: '',
-        parentId: 0
+        NickName: ''
       },
       downloadLoading: false
     }

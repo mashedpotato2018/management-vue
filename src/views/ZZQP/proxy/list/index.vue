@@ -5,7 +5,7 @@
         <div>
           <el-input
             v-model="listQuery.keyword"
-            placeholder="id/昵称"
+            placeholder="代理id"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
@@ -25,36 +25,42 @@
           >
             <el-table-column
               fixed
-              prop="id"
+              prop="AgentUserID"
               label="代理id"
-            />
+            >
+              <template slot-scope="scope">
+              <router-link class="primary-link" :to="{name:'proxy-list-detail',params:scope.row}" tag="a">
+              {{ scope.row.AgentUserID }}
+              </router-link>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="NickName"
               label="昵称"
             />
-            <el-table-column
-              prop="HeadImg"
-              label="头像"
-              align="center"
-            >
-              <template slot-scope="scope">
-                <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop="HeadImg"-->
+              <!--label="头像"-->
+              <!--align="center"-->
+            <!--&gt;-->
+              <!--<template slot-scope="scope">-->
+                <!--<img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column
               prop="Alliance"
               label="所属盟主"
             />
-            <el-table-column
-              prop="SubProxyTotal"
-              label="下级代理总数"
-            >
-              <template slot-scope="scope">
-                <router-link class="primary-link" :to="{name:'proxy-list-detail',params:scope.row}" tag="a">
-                  {{ scope.row.SubProxyTotal|toThousandFilter }}
-                </router-link>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop="SubProxyTotal"-->
+              <!--label="下级代理总数"-->
+            <!--&gt;-->
+              <!--<template slot-scope="scope">-->
+                <!--<router-link class="primary-link" :to="{name:'proxy-list-detail',params:scope.row}" tag="a">-->
+                  <!--{{ scope.row.SubProxyTotal|toThousandFilter }}-->
+                <!--</router-link>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column
               prop="SubPlayerTotal"
               label="所属玩家总数"

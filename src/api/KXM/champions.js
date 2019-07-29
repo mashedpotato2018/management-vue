@@ -10,9 +10,18 @@ export function fetchList(data) {
 }
 
 // 修改盟主
-export function Updatechampions(data) {
+export function Setchampions(data) {
   return request({
-    url: '/champions/update',
+    url: '/champions/SetChampions',
+    method: 'post',
+    data
+  })
+}
+
+// 修改盟主
+export function ChangePwd(data) {
+  return request({
+    url: '/champions/ChangePwd',
     method: 'post',
     data
   })

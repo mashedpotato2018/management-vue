@@ -7,6 +7,16 @@ export function statistics(data) {
     params: data
   })
 }
+
+// 转换记录(珍珠转点卡)
+export function TransRecord(data) {
+  return request({
+    url: '/player/TransRecord',
+    method: 'get',
+    params: data
+  })
+}
+
 // 输赢记录
 export function record(data) {
   return request({
@@ -24,6 +34,15 @@ export function score(data) {
     params: data
   })
 }
+// 用户列表
+export function UserList(data) {
+  return request({
+    url: '/player/UserList',
+    method: 'post',
+    data
+  })
+}
+
 
 // 设置数据
 export function update(data) {
@@ -52,10 +71,19 @@ export function freeze(data) {
   })
 }
 
-// 解封
-export function deblock(data) {
+//设置盟主
+export function SetMengZhu(data) {
   return request({
-    url: '/player/deblock',
+    url: '/player/SetMengZhu',
+    method: 'post',
+    data
+  })
+}
+
+//设置副盟主
+export function SetFuMengZhu(data) {
+  return request({
+    url: '/player/SetFuMengZhu',
     method: 'post',
     data
   })

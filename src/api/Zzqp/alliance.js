@@ -7,18 +7,27 @@ export function fetchList(data) {
     params: data
   })
 }
-// 玩家贡献
-export function playerYield(data) {
+// 所属副盟主列表
+export function allianceList(data) {
   return request({
-    url: '/alliance/playerYield',
+    url: '/alliance/AllianceList',
     method: 'get',
     params: data
   })
 }
-// 代理贡献
-export function proxyYield(data) {
+
+// 所属代理列表
+export function ProxyList(data) {
   return request({
-    url: '/alliance/proxyYield',
+    url: '/alliance/ProxyList',
+    method: 'get',
+    params: data
+  })
+}
+// 所属玩家列表
+export function PlayerList(data) {
+  return request({
+    url: '/alliance/PlayerList',
     method: 'get',
     params: data
   })
@@ -26,7 +35,7 @@ export function proxyYield(data) {
 // 开通代理列表
 export function openList(data) {
   return request({
-    url: '/alliance/open',
+    url: '/alliance/openList',
     method: 'get',
     params: data
   })

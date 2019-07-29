@@ -25,7 +25,7 @@
           >
             <el-table-column
               fixed
-              prop="UserId"
+              prop="UserID"
               label="用户ID"
             />
             <el-table-column
@@ -45,7 +45,7 @@
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{scope.row.RegisterTime|parseTime}}
+                {{scope.row.RegisterTime | DateFormat |parseTime}}
               </template>
             </el-table-column>
           </el-table>
@@ -67,7 +67,7 @@
               label="开始时间"
             >
               <template slot-scope="scope">
-                {{scope.row.startTime|parseTime}}
+                {{scope.row.startTime |DateFormat|parseTime}}
               </template>
             </el-table-column>
             <el-table-column
@@ -76,7 +76,7 @@
               label="珍珠数"
             >
               <template slot-scope="scope">
-                {{(scope.row.Money * scope.row.Mark)|toThousandFilter}}
+                {{(scope.row.LendMark?scope.row.Money/100:scope.row.Money/100 * -1)|toThousandFilter}}
               </template>
             </el-table-column>
             <el-table-column

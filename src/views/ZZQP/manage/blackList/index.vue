@@ -25,7 +25,7 @@
           >
             <el-table-column
               fixed
-              prop="UserId"
+              prop="UserID"
               label="用户ID"
             />
             <el-table-column
@@ -46,7 +46,7 @@
               label="银珍珠"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.Money/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -54,13 +54,17 @@
               label="金珍珠"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.Money/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
               prop="CardNum"
               label="房卡"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.CardNum/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
                 <el-button
@@ -84,7 +88,7 @@
 </template>
 
 <script>
-  import { statistics, deblock } from '@/api/Zzqp/player'
+  import { UserList, banned } from '@/api/Zzqp/player'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
@@ -119,14 +123,14 @@
     methods: {
       getList() {
         this.listLoading = true
-        statistics(this.listQuery).then(response => {
+        UserList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false
         })
       },
-      handleEdit(){
-        deblock().then(res=>{
+      handleEdit(index,row){
+        banned({UserID: row.UserID, state: 0}).then(res=>{
           if(res.code===20000)
             this.$notify({
               title: '成功',

@@ -124,7 +124,7 @@ export default [
     }
   },
   {
-    url: '/alliance/open',
+    url: '/alliance/openList',
     type: 'get',
     response: config => {
       const { keyword, page = 1, limit = 10 } = config.query

@@ -8,3 +8,12 @@ export function fetchList(data) {
     params: data
   })
 }
+
+// 充值流水
+export function RechargeWater(data) {
+  return request({
+    url: '/recharge/RechargeWater',
+    method: 'get',
+    params: data
+  })
+}

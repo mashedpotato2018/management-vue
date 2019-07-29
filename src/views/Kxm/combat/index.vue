@@ -6,18 +6,32 @@
           <el-input
             v-model="listQuery.id"
             placeholder="id"
-            style="width: 200px;"
+            style="width: 200px;margin-top: 7px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
           />
-          <el-input
-            v-model="listQuery.NickName"
-            placeholder="昵称"
-            style="width: 200px;"
-            class="filter-item"
-            @keyup.enter.native="handleFilter"
+          <el-date-picker
+            v-model="listQuery.bTime"
+            align="right"
+            type="date"
+            placeholder="开始时间"
+            :picker-options="pickerOptions"
           />
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-date-picker
+            v-model="listQuery.eTime"
+            align="right"
+            type="date"
+            placeholder="结束时间"
+            :picker-options="pickerOptions"
+          />
+          <el-button
+            v-waves
+            style="margin-top: 7px;"
+            class="filter-item"
+            type="primary"
+            icon="el-icon-search"
+            @click="handleFilter"
+          >
             查询
           </el-button>
         </div>
@@ -75,7 +89,12 @@
               label="输赢金币"
             >
               <template slot-scope="scope">
-                {{scope.row.TotalWinLose|toThousandFilter}}
+                <span v-if="scope.row.TotalWinLose<0" style="color: red;">
+                  {{scope.row.TotalWinLose/100|toThousandFilter}}
+                </span>
+                <span v-else style="color: green;">
+                  {{scope.row.TotalWinLose/100|toThousandFilter}}
+                </span>
               </template>
             </el-table-column>
             <el-table-column
@@ -97,64 +116,22 @@
 </template>
 
 <script>
-import { combatQuery } from '@/api/KXM/player'
-import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { toThousandFilter } from '@/filters'
-
-export default {
-  name: 'ComplexTable',
-  components: { Pagination },
-  directives: { waves },
-  filters: {
-    DateFormat(str) {
-      return parseInt(str.substr(6, 13))
-    },
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
+  import { combatQuery } from '@/api/KXM/player'
+  import { toThousandFilter } from '@/filters'
+  import query from '../mixins/query'
+  export default {
+    name: 'change',
+    mixins: [query],
+    methods:{
+      getList() {
+        this.listLoading = true
+        combatQuery(this.listQuery).then(response => {
+          this.list = response.data.items
+          this.basic = response.data.basic
+          this.total = response.data.total
+          this.listLoading = false
+        })
       }
-      return statusMap[status]
-    }
-  },
-  data() {
-    return {
-      list: [],
-      basic:[],
-      isShow:false,
-      total: 0,
-      listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 10,
-        id: '',
-        NickName: ''
-      },
-      downloadLoading: false
-    }
-  },
-  methods: {
-    getList() {
-      this.listLoading = true
-      combatQuery(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.basic = response.data.basic
-        this.total = response.data.total
-        this.listLoading = false
-      })
-    },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
-    }
-  },
-  watch:{
-    basic(newVal){
-      this.isShow = newVal.length>0
     }
   }
-}
 </script>

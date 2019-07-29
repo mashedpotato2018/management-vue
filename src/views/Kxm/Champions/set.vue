@@ -8,30 +8,25 @@
           :model="ruleForm"
           label-width="100px"
         >
-          <el-form-item label="账号" prop="account">
-            <el-input v-model="ruleForm.account" style="width: 200px;" />
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input v-model="ruleForm.password" type="password" style="width: 200px;" />
-          </el-form-item>
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="ruleForm.name" style="width: 200px;" />
-          </el-form-item>
-          <el-form-item label="手机号码" prop="phone">
-            <el-input v-model="ruleForm.phone" style="width: 200px;" />
-          </el-form-item>
-          <el-form-item label="身份证号码" prop="idCard">
-            <el-input v-model="ruleForm.idCard" style="width: 200px;" />
+          <el-form-item label="姓名" prop="RealName">
+            <el-input v-model="ruleForm.RealName" style="width: 200px;" />
           </el-form-item>
           <el-form-item label="性别">
-            <el-radio-group v-model="ruleForm.sex">
-              <el-radio :label="1">男</el-radio>
-              <el-radio :label="0">女</el-radio>
-            </el-radio-group>
+            <el-radio v-model="ruleForm.Gender" label="1">男</el-radio>
+            <el-radio v-model="ruleForm.Gender" label="0">女</el-radio>
           </el-form-item>
-          <el-form-item label="生效时间" prop="time">
+          <el-form-item label="密码" prop="LogonPass">
+            <el-input v-model="ruleForm.LogonPass" style="width: 200px;" show-password></el-input>
+          </el-form-item>
+          <el-form-item label="手机号码" prop="TelNo">
+            <el-input v-model="ruleForm.TelNo" style="width: 200px;" />
+          </el-form-item>
+          <el-form-item label="身份证号码" prop="IDNumber">
+            <el-input v-model="ruleForm.IDNumber" style="width: 200px;" />
+          </el-form-item>
+          <el-form-item label="生效时间" prop="Time">
             <el-date-picker
-              v-model="ruleForm.time"
+              v-model="ruleForm.Time"
               style="width: 250px;"
               type="daterange"
               start-placeholder="开始日期"
@@ -40,7 +35,7 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+            <el-button type="primary" :loading="loading" @click="submitForm('ruleForm')">立即创建</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -50,11 +45,13 @@
 </template>
 
 <script>
+  import { Setchampions } from '@/api/KXM/champions'
+  import { parseTime } from '@/utils'
 export default {
   data() {
     const checkPhone = (rule, value, callback) => {
       setTimeout(() => {
-        if (!/^1[34578]\d{9}$/.test(value)) {
+        if (value!=''&&!/^1[34578]\d{9}$/.test(value)) {
           callback(new Error('请输入正确的手机号'))
         } else {
           callback()
@@ -63,7 +60,7 @@ export default {
     }
     const checkIdCard = (rule, value, callback) => {
       setTimeout(() => {
-        if (!/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)) {
+        if (value!=''&&!/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)) {
           callback(new Error('请输入正确的身份证号码'))
         } else {
           callback()
@@ -72,44 +69,55 @@ export default {
     }
     return {
       rules: {
-        account: [{ required: true, message: '请输入账号', trigger: 'blur' }],
-        password: [
+        LogonPass: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 5, max: 8, message: '长度在 5 到 8 个字符', trigger: 'blur' }
+          { min: 3, max: 10, message: '请输入3-10位密码数', trigger: 'blur' }
         ],
-        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-        phone: [
-          // { required: true, message: '请输入手机号', trigger: 'blur' },
+        RealName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        TelNo: [
           { validator: checkPhone, trigger: 'blur' }
         ],
-        idCard: [
-          // { required: true, message: '身份证号码', trigger: 'blur' },
+        IDNumber: [
           { validator: checkIdCard, trigger: 'blur' }
         ],
-        time: [{ required: true, message: '请输入生效时间', trigger: 'blur' }]
+        Time: [{ required: true, message: '请输入生效时间', trigger: 'blur' }]
       },
       ruleForm: {
-        account: '',
-        password: '',
-        name: '',
-        phone: '',
-        idCard: '',
-        sex: 1,
-        time: ''
-      }
+        LogonPass: '',
+        RealName: '',
+        TelNo: '',
+        IDNumber: '',
+        Time: '',
+        Gender: '1'
+      },
+      loading: false
     }
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: '成功',
-            duration: 2000
+          this.loading = true
+          const postData = this.ruleForm
+          postData.EffectStart = parseTime(postData.Time[0])
+          postData.EffectEnd = parseTime(postData.Time[1])
+          delete postData.Time
+          Setchampions(postData).then(() => {
+            this.loading = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: '成功',
+              duration: 2000
+            })
+          }).then(()=>{
+            this.loading = false
+            this.$router.push('/Champions/list')
           })
-          this.$router.push('/Champions/list')
+            .catch(() => {
+              this.loading = false
+            })
+
         } else {
           return false
         }

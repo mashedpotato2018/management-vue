@@ -4,14 +4,14 @@
       <el-card class="box-card">
         <div>
           <el-input
-            v-model="listQuery.account"
+            v-model="listQuery.id"
             placeholder="代理商账号"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
           />
           <el-input
-            v-model="listQuery.name"
+            v-model="listQuery.NickName"
             placeholder="代理名称"
             style="width: 200px;"
             class="filter-item"
@@ -46,39 +46,43 @@
           >
             <el-table-column
               fixed
-              prop="account"
+              prop="UserID"
               label="代理商账号"
             >
               <template slot-scope="scope">
                 <router-link class="primary-link" :to="{name:'changePassword',params:scope.row}" tag="a">
-                  {{ scope.row.account }}
+                  {{ scope.row.UserID }}
                 </router-link>
               </template>
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="RealName"
               label="代理商姓名"
             />
             <el-table-column
-              prop="sex"
+              prop="Gender"
               label="性别"
             >
               <template slot-scope="scope">
-                {{ scope.row.sex | sexFilter }}
+                {{ scope.row.Gender | sexFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="phone"
+              prop="TelNo"
               label="电话号码"
             />
             <el-table-column
-              prop="idCard"
+              prop="IDNumber"
               label="身份证号码"
             />
             <el-table-column
-              prop="registerTime"
+              prop="CreateDate"
               label="开户时间"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.CreateDate | DateFormat|parseTime }}
+              </template>
+            </el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -114,14 +118,14 @@ export default {
   },
   data() {
     return {
-      list: null,
+      list: [],
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
         limit: 10,
-        account: '',
-        name: '',
+        id: '',
+        NickName: '',
         bTime: '',
         eTime: ''
         // bTime: new Date().getTime() - 3600 * 1000 * 24 * 7,

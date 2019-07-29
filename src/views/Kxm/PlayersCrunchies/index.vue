@@ -6,18 +6,39 @@
           <el-input
             v-model="listQuery.id"
             placeholder="id"
-            style="width: 200px;"
+            style="width: 200px;margin-top: 7px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
           />
           <el-input
             v-model="listQuery.NickName"
             placeholder="昵称"
-            style="width: 200px;"
+            style="width: 200px;margin-top: 7px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
           />
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-date-picker
+            v-model="listQuery.bTime"
+            align="right"
+            type="date"
+            placeholder="开始时间"
+            :picker-options="pickerOptions"
+          />
+          <el-date-picker
+            v-model="listQuery.eTime"
+            align="right"
+            type="date"
+            placeholder="结束时间"
+            :picker-options="pickerOptions"
+          />
+          <el-button
+            v-waves
+            class="filter-item"
+            type="primary"
+            style="margin-top: 7px;"
+            icon="el-icon-search"
+            @click="handleFilter"
+          >
             查询
           </el-button>
         </div>
@@ -37,7 +58,7 @@
               label="排名"
             />
             <el-table-column
-              prop="id"
+              prop="UserID"
               label="用户ID"
             />
             <el-table-column
@@ -45,10 +66,14 @@
               label="昵称"
             />
             <el-table-column
-              prop="WinMoney"
+              prop="TotalWinLose"
               label="赢金币"
               sortable="custom"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.TotalWinLose/100|toThousandFilter}}
+              </template>
+            </el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -64,7 +89,9 @@
 </template>
 
 <script>
+import { toThousandFilter } from '@/filters'
 import { PlayersCrunchies } from '@/api/KXM/player'
+import { parseTime } from '@/utils'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -82,7 +109,34 @@ export default {
         limit: 10,
         id: '',
         NickName: '',
-        sortType: 1
+        sortType: 0,
+        bTime: parseTime(new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7)),
+        eTime: new Date()
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
       },
       downloadLoading: false
     }

@@ -25,7 +25,7 @@
           >
             <el-table-column
               fixed
-              prop="UserId"
+              prop="UserID"
               label="用户ID"
             />
             <el-table-column
@@ -45,7 +45,7 @@
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{scope.row.RegisterTime|parseTime}}
+                {{scope.row.RegisterTime |DateFormat|parseTime}}
               </template>
             </el-table-column>
           </el-table>
@@ -55,6 +55,15 @@
             style="width: 100%"
             max-height="410"
           >
+            <el-table-column type="expand">
+              <template slot-scope="props">
+                <span class="expand" v-if="props.row.NickName_0">{{ props.row.NickName_0 }}: {{props.row.GameScore_0/100|toThousandFilter}}</span>
+                <span class="expand" v-if="props.row.NickName_1">{{ props.row.NickName_1 }}: {{props.row.GameScore_1/100|toThousandFilter}}</span>
+                <span class="expand" v-if="props.row.NickName_2">{{ props.row.NickName_2 }}: {{props.row.GameScore_2/100|toThousandFilter}}</span>
+                <span class="expand" v-if="props.row.NickName_3">{{ props.row.NickName_3 }}: {{props.row.GameScore_3/100|toThousandFilter}}</span>
+                <span class="expand" v-if="props.row.NickName_4">{{ props.row.NickName_4 }}: {{props.row.GameScore_4/100|toThousandFilter}}</span>
+              </template>
+            </el-table-column>
             <el-table-column
               type="index"
               label="序号"
@@ -62,21 +71,22 @@
               width="100">
             </el-table-column>
             <el-table-column
+              label="编号"
               align="center"
-              prop="startTime"
-              label="开始时间"
-            >
-              <template slot-scope="scope">
-                {{scope.row.startTime|parseTime}}
-              </template>
+              prop="DrawID">
+            </el-table-column>
+            <el-table-column
+              label="房间名"
+              align="center"
+              prop="ServerName">
             </el-table-column>
             <el-table-column
               align="center"
-              prop="TotalWinLose"
-              label="输赢珍珠数"
+              prop="InsretDate"
+              label="开始时间"
             >
               <template slot-scope="scope">
-                {{scope.row.TotalWinLose|toThousandFilter}}
+                {{scope.row.InsretDate | DateFormat | parseTime}}
               </template>
             </el-table-column>
           </el-table>
@@ -146,3 +156,8 @@
     }
   }
 </script>
+<style scoped>
+  .expand{
+    margin: 0 20px;
+  }
+</style>

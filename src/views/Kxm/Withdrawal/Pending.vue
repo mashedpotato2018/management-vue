@@ -33,7 +33,7 @@
           >
             <el-table-column
               fixed
-              prop="id"
+              prop="UserID"
               label="用户ID"
               align="center"
             />
@@ -46,23 +46,37 @@
               prop="AppliedAmount"
               label="申请金额"
               align="center"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.AppliedAmount/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="ActualAmount"
               label="应出款金额"
               align="center"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.ActualAmount/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="Material"
               label="申请提现资料"
-              width="600px;"
-              align="left"
-            />
+              align="center"
+            >
+              <template slot-scope="scope">
+                {{`[${scope.row.RealName}]${scope.row.Province}-${scope.row.CardType}(${scope.row.CardNo})` }}
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="ApplicationTime"
+              prop="ApplyDate"
               label="申请时间"
               align="center"
-            />
+            >
+              <template slot-scope="scope">
+                 {{scope.row.ApplyDate|DateFormat|parseTime }}
+              </template>
+            </el-table-column>
             <el-table-column
               fixed="right"
               label="操作"
@@ -73,7 +87,7 @@
                 <el-button
                   type="primary"
                   size="small"
-                  @click="handleUpdate(scope.row)"
+                  @click="handleUpdate(scope.$index,scope.row)"
                 >
                   处理
                 </el-button>
@@ -102,7 +116,7 @@
       >
         <el-form-item
           label="处理结果"
-          prop="type"
+          prop="state"
         >
           <el-select v-model="temp.state" class="filter-item" placeholder="请选择">
             <el-option label="同意" :value="1" />
@@ -126,6 +140,7 @@
 import { pendingList, UpdateWithdrawal } from '@/api/KXM/withdrawal'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -153,13 +168,16 @@ export default {
       rules: {
         state: [{ required: true, message: '处理结果为必须项', trigger: 'change' }]
       },
-      temp: {
+      temp:{
         state: 1
       }
     }
   },
   created() {
     this.getList()
+    setInterval(()=>{
+      this.handleFilter()
+    },10000)
   },
   methods: {
     getList() {
@@ -175,7 +193,8 @@ export default {
       this.getList()
     },
     handleUpdate(index, row) {
-      this.temp = Object.assign({}, row)
+      this.temp = Object.assign(this.temp, row)
+      this.temp.state = 1
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -193,7 +212,8 @@ export default {
               type: '成功',
               duration: 2000
             })
-            this.$router.push('/WithdrawalRecord/Record')
+            this.handleFilter()
+            // this.$router.push('/WithdrawalRecord/Record')
           })
         }
       })

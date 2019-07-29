@@ -23,7 +23,8 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
-
+// import { title } from '@/utils/module'
+// console.log(title)
 export default {
   components: { SidebarItem, Logo },
   computed: {

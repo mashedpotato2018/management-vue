@@ -87,6 +87,48 @@ export default [
     }
   },
   {
+    url: '/proxy/RefereeList',
+    type: 'get',
+    response: config => {
+      const { keyword, parentId = 0, page = 1, limit = 10 } = config.query
+      const mockList = List.filter(item => {
+        if (keyword && (item.UserId !== parseInt(keyword)&&item.NickName.indexOf(keyword) < 0)) return false
+        return item.parentId === parseInt(parentId)
+      })
+
+      const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
+      return {
+        code: 20000,
+        data: {
+          total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/proxy/PlayerList',
+    type: 'get',
+    response: config => {
+      const { keyword, parentId = 0, page = 1, limit = 10 } = config.query
+      const mockList = List.filter(item => {
+        if (keyword && (item.UserId !== parseInt(keyword)&&item.NickName.indexOf(keyword) < 0)) return false
+        return item.parentId === parseInt(parentId)
+      })
+
+      const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
+      return {
+        code: 20000,
+        data: {
+          total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
     url: '/proxy/playerYield',
     type: 'get',
     response: config => {

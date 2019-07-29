@@ -12,7 +12,7 @@
         >
           <el-form-item label="账号" prop="pass">
             <el-input
-              v-model="ruleForm.account"
+              v-model="ruleForm.UserID"
               :disabled="true"
               utocomplete="off"
             />
@@ -24,7 +24,7 @@
             <el-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+            <el-button type="primary" :loading="loading" @click="submitForm('ruleForm')">提交</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+  import { ChangePwd } from '@/api/KXM/champions'
 export default {
   data() {
     const validatePass = (rule, value, callback) => {
@@ -57,7 +58,7 @@ export default {
     }
     return {
       ruleForm: {
-        account: '',
+        UserID: '',
         Pass: '',
         checkPass: ''
       },
@@ -69,26 +70,31 @@ export default {
         checkPass: [
           { validator: validatePass2, trigger: 'blur' }
         ]
-      }
+      },
+      loading: false
     }
   },
   created() {
-    if (!this.$route.params.account) {
+    if (!this.$route.params.UserID) {
       this.$router.push('/Champions/list')
     }
-    this.ruleForm.account = this.$route.params.account
+    this.ruleForm.UserID = this.$route.params.UserID
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$notify({
-            title: '成功',
-            message: '修改成功',
-            type: '成功',
-            duration: 2000
+          this.loading = true
+          ChangePwd(this.ruleForm).then(()=>{
+            this.$notify({
+              title: '成功',
+              message: '修改成功',
+              type: '成功',
+              duration: 2000
+            })
+            this.loading = false
+            this.$router.push('/Champions/list')
           })
-          this.$router.push('/Champions/list')
         } else {
           return false
         }

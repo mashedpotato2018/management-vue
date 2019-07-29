@@ -38,7 +38,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.Money/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -46,7 +46,7 @@
               label="昨天"
             >
               <template slot-scope="scope">
-                {{ scope.row.YesterdayMoney | toThousandFilter }}
+                {{ scope.row.YesterdayMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -54,7 +54,7 @@
               label="近7天"
             >
               <template slot-scope="scope">
-                {{ scope.row.WeekMoney | toThousandFilter }}
+                {{ scope.row.WeekMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -62,7 +62,7 @@
               label="近30天"
             >
               <template slot-scope="scope">
-                {{ scope.row.MonthMoney | toThousandFilter }}
+                {{ scope.row.MonthMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>

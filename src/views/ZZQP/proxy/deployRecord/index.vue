@@ -5,7 +5,7 @@
         <div>
           <el-input
             v-model="listQuery.keyword"
-            placeholder="用户id/昵称"
+            placeholder="用户id"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
@@ -45,7 +45,7 @@
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{scope.row.RegisterTime|parseTime}}
+                {{scope.row.RegisterTime|DateFormat|parseTime}}
               </template>
             </el-table-column>
           </el-table>
@@ -67,7 +67,7 @@
               label="开始时间"
             >
               <template slot-scope="scope">
-                {{scope.row.Time|parseTime}}
+                {{scope.row.Time|DateFormat|parseTime}}
               </template>
             </el-table-column>
             <el-table-column
@@ -76,7 +76,7 @@
               label="珍珠数"
             >
               <template slot-scope="scope">
-                {{(scope.row.Money * scope.row.Mark)|toThousandFilter}}
+                {{scope.row.Money/100|toThousandFilter}}
               </template>
             </el-table-column>
             <el-table-column
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-  import { record } from '@/api/Zzqp/proxy'
+  import { deploy } from '@/api/Zzqp/proxy'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -137,7 +137,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        record(this.listQuery).then(response => {
+        deploy(this.listQuery).then(response => {
           this.list = response.data.items
           this.basic = response.data.basic
           this.total = response.data.total

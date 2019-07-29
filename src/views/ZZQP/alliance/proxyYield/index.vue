@@ -25,6 +25,10 @@
           >
             <el-table-column
               fixed
+              prop="AgentID"
+              label="代理id"
+            />
+            <el-table-column
               prop="UserId"
               label="用户ID"
             />
@@ -38,7 +42,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.Money/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -46,7 +50,7 @@
               label="昨天"
             >
               <template slot-scope="scope">
-                {{ scope.row.YesterdayMoney | toThousandFilter }}
+                {{ scope.row.YesterdayMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -54,7 +58,7 @@
               label="近7天"
             >
               <template slot-scope="scope">
-                {{ scope.row.WeekMoney | toThousandFilter }}
+                {{ scope.row.WeekMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -62,7 +66,7 @@
               label="近30天"
             >
               <template slot-scope="scope">
-                {{ scope.row.MonthMoney | toThousandFilter }}
+                {{ scope.row.MonthMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>
@@ -80,14 +84,14 @@
 </template>
 
 <script>
-  import { proxyYield } from '@/api/Zzqp/alliance'
+  import { ProxyList } from '@/api/Zzqp/alliance'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
   export default {
-    name: 'ComplexTable',
+    name: 'proxyYield',
     components: { Pagination },
     directives: { waves },
     filters: {
@@ -101,6 +105,7 @@
         total: 0,
         listLoading: true,
         listQuery: {
+          parentId: 0,
           page: 1,
           limit: 10,
           keyword: ''
@@ -109,12 +114,16 @@
       }
     },
     created() {
+      if (!this.$route.params.id) {
+        this.$router.push('/alliance/list')
+      }
+      this.listQuery.parentId = this.$route.params.id
       this.getList()
     },
     methods: {
       getList() {
         this.listLoading = true
-        proxyYield(this.listQuery).then(response => {
+        ProxyList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false

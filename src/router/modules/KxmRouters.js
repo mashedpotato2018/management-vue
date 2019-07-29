@@ -39,14 +39,45 @@ const KxmRouters = [
     ]
   },
   {
-    path: '/Line',
+    path: '/change',
     component: Layout,
     children: [
       {
-        path: 'Chart',
-        component: () => import('@/views/Kxm/HallWater/Line'),
-        name: 'Chart',
-        meta: { title: '大厅流水', icon: 'chart', affix: false }
+        path: 'Query',
+        component: () => import('@/views/Kxm/change'),
+        name: 'change',
+        meta: { title: '变化金币查询', icon: 'change', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/Line',
+    component: Layout,
+    meta: { title: '图表统计', icon: 'chart', affix: false },
+    children: [
+      {
+        path: 'EarningsChart',
+        component: () => import('@/views/Kxm/PlatformEarnings/Line'),
+        name: 'EarningsChart',
+        meta: { title: '平台收益', affix: false }
+      },
+      {
+        path: 'WaterChart',
+        component: () => import('@/views/Kxm/HallWater'),
+        name: 'WaterChart',
+        meta: { title: '大厅流水', affix: false }
+      },
+      {
+        path: 'RechargeWater',
+        component: () => import('@/views/Kxm/RechargeWater'),
+        name: 'RechargeWater',
+        meta: { title: '充值流水', affix: false }
+      },
+      {
+        path: 'OnLineWater',
+        component: () => import('@/views/Kxm/OnLineWater'),
+        name: 'OnLineWater',
+        meta: { title: '实时在线用户', affix: false }
       }
     ]
   },
@@ -110,34 +141,34 @@ const KxmRouters = [
       }
     ]
   },
-  {
-    path: '/Champions',
-    component: Layout,
-    meta: { title: '盟主生成和管理', icon: 'dashboard', affix: false },
-    name: 'Champions',
-    redirect: '/Champions/list',
-    children: [
-      {
-        path: 'list',
-        component: () => import('@/views/Kxm/Champions/list'),
-        name: 'list',
-        meta: { title: '盟主列表' }
-      },
-      {
-        path: 'set',
-        component: () => import('@/views/Kxm/Champions/set'),
-        name: 'set',
-        meta: { title: '盟主管理' }
-      },
-      {
-        path: 'changePassword',
-        component: () => import('@/views/Kxm/Champions/changePassword'),
-        name: 'changePassword',
-        meta: { title: '修改面密码' },
-        hidden: true
-      }
-    ]
-  },
+  // {
+  //   path: '/Champions',
+  //   components: Layout,
+  //   meta: { title: '盟主生成和管理', icon: 'dashboard', affix: false },
+  //   name: 'Champions',
+  //   redirect: '/Champions/list',
+  //   children: [
+  //     {
+  //       path: 'list',
+  //       components: () => import('@/views/Kxm/Champions/list'),
+  //       name: 'list',
+  //       meta: { title: '盟主列表' }
+  //     },
+  //     {
+  //       path: 'set',
+  //       components: () => import('@/views/Kxm/Champions/set'),
+  //       name: 'set',
+  //       meta: { title: '盟主管理' }
+  //     },
+  //     {
+  //       path: 'changePassword',
+  //       components: () => import('@/views/Kxm/Champions/changePassword'),
+  //       name: 'changePassword',
+  //       meta: { title: '修改面密码' },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
   {
     path: '/notice',
     component: Layout,
@@ -146,7 +177,31 @@ const KxmRouters = [
         path: 'notice',
         component: () => import('@/views/Kxm/notice/index'),
         name: 'notice',
-        meta: { title: '公告配置', icon: 'documentation', affix: false }
+        meta: { title: '公告配置', icon: 'edit', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/setProxy',
+    component: Layout,
+    children: [
+      {
+        path: 'set',
+        component: () => import('@/views/Kxm/SetProxy/index'),
+        name: 'setProxy',
+        meta: { title: '绑定代理', icon: 'bind', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/backList',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/Kxm/backList/index'),
+        name: 'backList',
+        meta: { title: '黑名单', icon: 'backList', affix: false }
       }
     ]
   },

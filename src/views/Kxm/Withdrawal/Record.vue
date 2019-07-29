@@ -33,7 +33,7 @@
           >
             <el-table-column
               fixed
-              prop="id"
+              prop="UserID"
               label="用户ID"
               align="center"
             />
@@ -46,24 +46,37 @@
               prop="AppliedAmount"
               label="申请金额"
               align="center"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.AppliedAmount/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="ActualAmount"
               label="应出款金额"
               align="center"
-            />
+            >
+              <template slot-scope="scope">
+                {{scope.row.ActualAmount/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="Material"
               label="申请提现资料"
-              width="600px"
-              align="left"
-            />
-            <el-table-column
-              prop="ApplicationTime"
-              label="申请时间"
-              width="200px;"
               align="center"
-            />
+            >
+              <template slot-scope="scope">
+                {{`[${scope.row.RealName}]${scope.row.Province}-${scope.row.CardType}(${scope.row.CardNo})` }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="ApplyDate"
+              label="申请时间"
+              align="center"
+            >
+              <template slot-scope="scope">
+                {{scope.row.ApplyDate|DateFormat|parseTime }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="state"
               label="处理结果"
@@ -80,7 +93,11 @@
               label="处理时间"
               width="200px;"
               align="center"
-            />
+            >
+              <template slot-scope="{row}">
+                {{ row.HandlingTime |DateFormat|parseTime }}
+              </template>
+            </el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -99,6 +116,7 @@
 import { RecordList } from '@/api/KXM/withdrawal'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -113,12 +131,9 @@ export default {
       const type = { 1: '同意', 2: '拒绝' }
       return type[val]
     },
-    statusFilter(status) {
-      const statusMap = {
-        1: 'success',
-        2: 'danger'
-      }
-      return statusMap[status]
+    statusFilter(val){
+      const type = { 1: 'success', 2: 'danger' }
+      return type[val]
     }
   },
   data() {

@@ -1,17 +1,46 @@
 import Layout from '@/layout'
 
 const KxmRouters = [
+
   {
     path: '/',
     component: Layout,
-    redirect: '/statistics',
-    meta: { title: '玩家', icon: 'chart', affix: true },
+    meta: { title: '盟主', icon: 'user' },
+    name:'alliance',
+    redirect: '/alliance/list',
     children: [
       {
-        path: '/statistics',
-        component: () => import('@/views/ZZQP/player/statistics'),
-        name: 'statistics',
-        meta: { title: '输赢统计'}
+        path: '/alliance/list',
+        component: () => import('@/views/ZZQP/alliance/list'),
+        name: 'alliance-list',
+        meta: { title: '盟主列表'}
+      },
+      {
+        path: '/alliance/proxy-list',
+        component: () => import('@/views/ZZQP/alliance/openList'),
+        name: 'alliance-proxy-list',
+        meta: { title: '开通代理列表'}
+      },
+      {
+        path: '/alliance/alliance-yield',
+        component: () => import('@/views/ZZQP/alliance/allianceYield'),
+        name: 'alliance-alliance-yield',
+        meta: { title: '所属副盟主贡献'},
+        hidden: true
+      },
+      {
+        path: '/alliance/proxy-yield',
+        component: () => import('@/views/ZZQP/alliance/proxyYield'),
+        name: 'alliance-proxy-yield',
+        meta: { title: '所属代理贡献'},
+        hidden: true
+      },
+      {
+        path: '/alliance/player-yield',
+        component: () => import('@/views/ZZQP/alliance/playerYield'),
+        name: 'alliance-player-yield',
+        meta: { title: '所属玩家贡献'},
+        hidden: true
       }
     ]
   },
@@ -41,51 +70,19 @@ const KxmRouters = [
         name: 'player-list-detail',
         meta: { title: '玩家详情' },
         hidden: true
-      },
-      {
-        path: 'player-yield',
-        component: () => import('@/views/ZZQP/proxy/playerYield'),
-        name: 'proxy-player-yield',
-        meta: { title: '玩家贡献收益'}
-      },
-      {
-        path: 'proxy-yield',
-        component: () => import('@/views/ZZQP/proxy/proxyYield'),
-        name: 'proxy-proxy-yield',
-        meta: { title: '下级代理推荐奖励'}
       }
     ]
   },
   {
-    path: '/alliance',
+    path: '/statistics',
     component: Layout,
-    meta: { title: '盟主', icon: 'user' },
-    name:'alliance',
-    redirect: '/alliance/list',
+    meta: { icon: 'chart'},
     children: [
       {
-        path: 'list',
-        component: () => import('@/views/ZZQP/alliance/list'),
-        name: 'alliance-list',
-        meta: { title: '盟主列表'}
-      },
-      {
-        path: 'proxy-list',
-        component: () => import('@/views/ZZQP/alliance/openList'),
-        name: 'alliance-proxy-list',
-        meta: { title: '开通代理列表'}
-      },
-      {
-        path: 'player-yield',
-        component: () => import('@/views/ZZQP/alliance/playerYield'),
-        name: 'alliance-player-yield',
-        meta: { title: '所属玩家贡献'}
-      },
-      {
-        path: 'proxy-yield',
-        component: () => import('@/views/ZZQP/alliance/proxyYield'),
-        name: 'alliance-proxy-yield',
-        meta: { title: '所属代理贡献'}
+        path: '/statistics',
+        component: () => import('@/views/ZZQP/player/statistics'),
+        name: 'statistics',
+        meta: { title: '玩家输赢统计'}
       }
     ]
   },
@@ -100,19 +97,34 @@ const KxmRouters = [
         path: 'list',
         component: () => import('@/views/ZZQP/player/record'),
         name: 'WinRecord',
-        meta: { title: '玩家输赢记录'},
+        meta: { title: '玩家输赢记录'}
       },
       {
         path: 'score',
         component: () => import('@/views/ZZQP/player/score'),
         name: 'upDownRecord',
-        meta: { title: '玩家上下分记录' },
+        meta: { title: '玩家上下分记录' }
       },
       {
         path: 'deploy',
         component: () => import('@/views/ZZQP/proxy/deployRecord'),
         name: 'proxy-deploy',
         meta: { title: '代理调配记录'}
+      }
+    ]
+  },
+  {
+    path: '/Trans',
+    component: Layout,
+    meta: { title: '珍珠转换点卡记录', icon: 'guide' },
+    name:'Trans',
+    redirect: '/Trans/list',
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/ZZQP/Trans/index'),
+        name: 'Trans-list',
+        meta: { title: '珍珠转换点卡记录'}
       }
     ]
   },
@@ -128,27 +140,6 @@ const KxmRouters = [
         component: () => import('@/views/ZZQP/recharge/index'),
         name: 'recharge-list',
         meta: { title: '充值记录'}
-      }
-    ]
-  },
-  {
-    path: '/account',
-    component: Layout,
-    meta: { title: '用户管理', icon: 'bug' },
-    name:'account',
-    redirect: '/account/update',
-    children: [
-      {
-        path: 'update',
-        component: () => import('@/views/ZZQP/manage/setUser'),
-        name: 'update',
-        meta: { title: '用户设置'}
-      },
-      {
-        path: 'blacklist',
-        component: () => import('@/views/ZZQP/manage/blackList'),
-        name: 'blacklist',
-        meta: { title: '黑名单'}
       }
     ]
   }

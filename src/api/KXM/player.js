@@ -7,6 +7,16 @@ export function fetchList(data) {
     params: data
   })
 }
+
+// 封禁用户
+export function banned(data) {
+  return request({
+    url: '/player/banned',
+    method: 'post',
+    data
+  })
+}
+
 // 战绩查询
 export function combatQuery(data) {
   return request({
@@ -15,6 +25,16 @@ export function combatQuery(data) {
     params: data
   })
 }
+
+// 金币变化查询
+export function changeQuery(data) {
+  return request({
+    url: '/player/changeQuery',
+    method: 'get',
+    params: data
+  })
+}
+
 // 大厅流水
 export function HallWater(data) {
   return request({
@@ -23,6 +43,16 @@ export function HallWater(data) {
     params: data
   })
 }
+
+// 实时在线人数
+export function OnLineWater(data) {
+  return request({
+    url: '/player/OnLineWater',
+    method: 'get',
+    params: data
+  })
+}
+
 // 玩家赠送记录
 export function GivingRecords(data) {
   return request({

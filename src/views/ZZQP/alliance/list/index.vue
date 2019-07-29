@@ -5,7 +5,7 @@
         <div>
           <el-input
             v-model="listQuery.keyword"
-            placeholder="id/昵称"
+            placeholder="盟主id"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
@@ -25,20 +25,30 @@
           >
             <el-table-column
               fixed
-              prop="id"
+              prop="AllianceUserID"
               label="盟主id"
             />
             <el-table-column
               prop="NickName"
               label="昵称"
             />
+            <!--<el-table-column-->
+              <!--prop="HeadImg"-->
+              <!--label="头像"-->
+              <!--align="center"-->
+            <!--&gt;-->
+              <!--<template slot-scope="scope">-->
+                <!--<img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column
-              prop="HeadImg"
-              label="头像"
-              align="center"
+              prop="SubAllianceTotal"
+              label="下级副盟主总数"
             >
               <template slot-scope="scope">
-                <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
+                <router-link class="primary-link" :to="{name:'alliance-alliance-yield',params:scope.row}" tag="a">
+                  {{ scope.row.SubAllianceTotal|toThousandFilter }}
+                </router-link>
               </template>
             </el-table-column>
             <el-table-column
@@ -46,7 +56,7 @@
               label="下级代理总数"
             >
               <template slot-scope="scope">
-                <router-link class="primary-link" :to="{name:'proxy-list-detail',params:scope.row}" tag="a">
+                <router-link class="primary-link" :to="{name:'alliance-proxy-yield',params:scope.row}" tag="a">
                   {{ scope.row.SubProxyTotal|toThousandFilter }}
                 </router-link>
               </template>
@@ -56,7 +66,7 @@
               label="所属玩家总数"
             >
               <template slot-scope="scope">
-                <router-link class="primary-link" :to="{name:'player-list-detail',params:scope.row}" tag="a">
+                <router-link class="primary-link" :to="{name:'alliance-player-yield',params:scope.row}" tag="a">
                   {{ scope.row.SubPlayerTotal|toThousandFilter }}
                 </router-link>
               </template>
@@ -93,7 +103,7 @@
     },
     data() {
       return {
-        list: null,
+        list: [],
         total: 0,
         listLoading: true,
         listQuery: {

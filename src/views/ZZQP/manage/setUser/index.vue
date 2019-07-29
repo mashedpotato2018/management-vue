@@ -22,11 +22,13 @@
             border
             style="width: 100%"
             max-height="550"
+            @filter-change="handleFilterChange"
           >
             <el-table-column
               fixed
-              prop="UserId"
+              prop="UserID"
               label="用户ID"
+              :filters="[{ text: '在线', value: 1 }]"
             />
             <el-table-column
               prop="NickName"
@@ -42,11 +44,23 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="ServerName"
+              label="所在房间"
+              :filters="[
+              { text: '血战', value: 1 },
+              { text: '金花', value: 2 },
+              { text: '牛牛', value: 3 },
+              { text: '大唐麻将2人房', value: 4 },
+              { text: '大唐麻将3人房', value: 5 },
+              { text: '大唐麻将4人房', value: 6 }
+              ]"
+            />
+            <el-table-column
               prop="Money"
               label="银珍珠"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.Money/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -54,40 +68,62 @@
               label="金珍珠"
             >
               <template slot-scope="scope">
-                {{ scope.row.KingMoney | toThousandFilter }}
+                {{ scope.row.KingMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
               prop="CardNum"
               label="房卡"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.CardNum/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="LastLoginTime"
               label="最后登录时间"
               width="200"
             >
               <template slot-scope="scope">
-                {{ scope.row.LastLoginTime | parseTime }}
+                {{ scope.row.LastLoginTime |DateFormat| parseTime }}
               </template>
             </el-table-column>
             <el-table-column
               fixed="right"
-              width="220"
               label="操作"
+              width="350"
             >
               <template slot-scope="scope">
                 <el-button
+                  v-if="scope.row.RoleMark===1"
+                  size="mini"
+                  type="danger"
+                  @click="handleSetMengZhu(scope.row.UserID)"
+                >
+                  设置盟主
+                </el-button>
+                <el-button
+                  v-if="((scope.row.RoleMark===1&&scope.row.Money<100)||scope.row.RoleMark===3)"
+                  size="mini"
+                  type="success"
+                  @click="handleSetFuMengZhu(scope.row.UserID)"
+                >
+                  设置副盟主
+                </el-button>
+                <el-button
                   size="mini"
                   type="primary"
-                  @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
+                  @click="handleUpdate(scope.$index, scope.row)"
+                >
+                  增送
+                </el-button>
                 <el-button
                   size="mini"
                   type="warning"
-                  @click="handleBanned(scope.$index, scope.row)">封禁</el-button>
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleFreeze(scope.$index, scope.row)">冻结</el-button>
+                  @click="handleBanned(scope.$index, scope.row)"
+                >
+                  封禁
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -122,7 +158,7 @@
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="updateData()">
+        <el-button type="primary" :loading="loading" @click="updateData()">
           提交
         </el-button>
       </div>
@@ -131,7 +167,7 @@
 </template>
 
 <script>
-  import { statistics, update, banned, freeze } from '@/api/Zzqp/player'
+  import { UserList, update, banned, SetMengZhu,SetFuMengZhu } from '@/api/Zzqp/player'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
@@ -147,6 +183,15 @@
       }
     },
     data() {
+      const valiNumber = (rule, value, callback) => {
+        setTimeout(() => {
+          if (!/^-*[0-9]+$/.test(value)) {
+            callback(new Error('请输入数字值'))
+          } else {
+            callback()
+          }
+        }, 1000)
+      }
       return {
         list: [],
         total: 0,
@@ -155,40 +200,87 @@
           page: 1,
           limit: 10,
           keyword: '',
-          state: true
+          state: true,
+          Online: false,
+          KindID: []
         },
         dialogFormVisible: false,
         rules: {
           Money: [
               { required: true, message: '银珍珠为必须项', trigger: 'blur' },
-              { type: 'number', message: '必须为数字值', trigger: 'blur'}
+              { validator: valiNumber, trigger: 'blur' }
             ],
           CardNum: [
               { required: true, message: '房卡为必须项', trigger: 'blur' },
-              { type: 'number', message: '必须为数字值', trigger: 'blur'}
+              { validator: valiNumber, trigger: 'blur' }
             ]
         },
         temp: {},
-        downloadLoading: false
+        loading: false
       }
     },
     created() {
       this.getList()
     },
     methods: {
-      handleBanned(){
-        banned().then(res=>{
+      handleFilterChange(filters){
+        if(filters['el-table_1_column_1']&&filters['el-table_1_column_1'].length){
+          this.listQuery.Online=true
+        }else{
+          this.listQuery.Online=false
+        }
+        filters['el-table_1_column_4']&&(this.listQuery.KindID = filters['el-table_1_column_4'].map(item=>item))
+        this.handleFilter()
+      },
+      handleSetFuMengZhu(UserID){
+        this.$prompt('请输入盟主', '设置副盟主', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^\d+$/,
+          inputErrorMessage: '数字格式不正确'
+        }).then(({ value }) => {
+          SetFuMengZhu({mengZhuID:value,UserID}).then(res=>{
+            if(res.code===20000)
+              this.$notify({
+                title: '成功',
+                message: res.Message,
+                type: '成功',
+                duration: 2000
+              })
+            this.handleFilter()
+          })
+        })
+
+      },
+      handleSetMengZhu(UserID){
+        SetMengZhu({UserID}).then(res=>{
           if(res.code===20000)
             this.$notify({
               title: '成功',
-              message: '封禁成功',
+              message: res.Message,
               type: '成功',
               duration: 2000
             })
+          this.handleFilter()
+        })
+      },
+      handleBanned(index, row){
+        banned({UserID: row.UserID, state: 1}).then(res=>{
+          if(res.code===20000)
+            this.$notify({
+              title: '成功',
+              message: res.Message,
+              type: '成功',
+              duration: 2000
+            })
+          this.handleFilter()
         })
       },
       handleUpdate(index, row) {
         this.temp = Object.assign({}, row)
+        this.temp.CardNum = 0
+        this.temp.Money = 0
+
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -197,35 +289,30 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.loading = true
             const tempData = Object.assign({}, this.temp)
-            console.log(tempData.Money,tempData.CardNum)
-            update(tempData).then(() => {
+            tempData.CardNum = tempData.CardNum*100
+            tempData.Money = tempData.Money*100
+            update(tempData).then((res) => {
+              this.loading = false
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
-                message: '更新成功',
+                message: res.Message,
                 type: '成功',
                 duration: 2000
               })
               this.handleFilter()
             })
-          }
-        })
-      },
-      handleFreeze(){
-        freeze().then(res=>{
-          if(res.code===20000)
-            this.$notify({
-              title: '成功',
-              message: '冻结成功',
-              type: '成功',
-              duration: 2000
+            .catch(() => {
+              this.loading = false
             })
+          }
         })
       },
       getList() {
         this.listLoading = true
-        statistics(this.listQuery).then(response => {
+        UserList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false
@@ -242,7 +329,7 @@
   >>>.el-dialog{
     width: 400px;
   }
-  >>>.el-input{
+  >>>.el-input[tpye="text"]{
     width: 200px;
   }
   .el-form-item{

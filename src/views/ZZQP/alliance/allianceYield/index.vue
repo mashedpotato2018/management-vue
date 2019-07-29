@@ -25,27 +25,48 @@
           >
             <el-table-column
               fixed
-              prop="id"
-              label="玩家ID"
+              prop="AgentID"
+              label="代理id"
+            />
+            <el-table-column
+              prop="UserId"
+              label="用户ID"
             />
             <el-table-column
               prop="NickName"
               label="昵称"
             />
             <el-table-column
-              prop="RegisterTime"
-              label="注册时间"
+              prop="Money"
+              label="收益贡献"
+              align="center"
             >
               <template slot-scope="scope">
-                {{ scope.row.RegisterTime | parseTime }}
+                {{ scope.row.Money/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="Money"
-              label="珍珠数"
+              prop="YesterdayMoney"
+              label="昨天"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.YesterdayMoney/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="WeekMoney"
+              label="近7天"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.WeekMoney/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="MonthMoney"
+              label="近30天"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.MonthMoney/100 | toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>
@@ -63,14 +84,14 @@
 </template>
 
 <script>
-  import { fetchList } from '@/api/Zzqp/alliance'
+  import { allianceList } from '@/api/Zzqp/alliance'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
   export default {
-    name: 'ComplexTable',
+    name: 'allianceYield',
     components: { Pagination },
     directives: { waves },
     filters: {
@@ -84,9 +105,9 @@
         total: 0,
         listLoading: true,
         listQuery: {
+          parentId: 0,
           page: 1,
           limit: 10,
-          parentId: 0,
           keyword: ''
         },
         downloadLoading: false
@@ -94,7 +115,7 @@
     },
     created() {
       if (!this.$route.params.id) {
-        this.$router.push('/proxy/list')
+        this.$router.push('/alliance/list')
       }
       this.listQuery.parentId = this.$route.params.id
       this.getList()
@@ -102,7 +123,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchList(this.listQuery).then(response => {
+        allianceList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false

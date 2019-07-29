@@ -6,14 +6,14 @@
           <el-date-picker
             v-model="listQuery.bTime"
             align="right"
-            type="date"
+            :type="date"
             placeholder="开始时间"
             :picker-options="pickerOptions"
           />
           <el-date-picker
             v-model="listQuery.eTime"
             align="right"
-            type="date"
+            :type="date"
             placeholder="结束时间"
             :picker-options="pickerOptions"
           />
@@ -36,6 +36,10 @@
             height="600px"
             width="100%"
             :list="list"
+            :title="title"
+            :unit="unit"
+            :Todate="Todate"
+            :handle="handle"
           />
         </div>
       </el-card>
@@ -44,17 +48,39 @@
 </template>
 
 <script>
-import { HallWater } from '@/api/KXM/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Chart from './components/Charts/LineMarker'
 
 export default {
-  name: 'LineChart',
+  name: 'dataLine',
   components: { Chart },
   directives: { waves },
+  props:{
+    unit: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    query: {
+      type: Function,
+      default: null
+    },
+    handle:{
+      type: Number,
+      default: 100
+    },
+    Todate:{
+      type: String,
+      default: '{y}-{m}-{d}'
+    }
+  },
   data() {
     return {
+      date:'date',
       list: null,
       listLoading: true,
       listQuery: {
@@ -95,7 +121,8 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      HallWater(this.listQuery).then(response => {
+      this.query(this.listQuery)
+      .then(response => {
         this.list = response.data.items
         this.listLoading = false
       })

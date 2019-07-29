@@ -55,7 +55,7 @@
               label="名下玩家输赢统计"
             >
               <template slot-scope="scope">
-                {{ scope.row.WinningLosingTotal|toThousandFilter }}
+                {{ scope.row.WinningLosingTotal/100|toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -63,7 +63,7 @@
               label="代理所得红利"
             >
               <template slot-scope="scope">
-                {{ scope.row.profitTotal|toThousandFilter }}
+                {{ scope.row.profitTotal/100|toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -71,7 +71,7 @@
               label="下级提供利润"
             >
               <template slot-scope="scope">
-                {{ scope.row.ProvideProfits|toThousandFilter }}
+                {{ scope.row.ProvideProfits/100|toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>

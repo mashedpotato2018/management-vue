@@ -5,7 +5,7 @@
         <div>
           <el-input
             v-model="listQuery.keyword"
-            placeholder="用户id/昵称"
+            placeholder="用户id"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
@@ -25,7 +25,7 @@
           >
             <el-table-column
               fixed
-              prop="id"
+              prop="UserId"
               label="玩家ID"
             />
             <el-table-column
@@ -37,7 +37,7 @@
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{ scope.row.RegisterTime | parseTime }}
+                {{ scope.row.RegisterTime| DateFormat | parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -45,7 +45,39 @@
               label="珍珠数"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.Money/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="TotalMoney"
+              label="收益贡献"
+            >
+              <template slot-scope="scope">
+                {{ (scope.row.TotalMoney/100) | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="Money"
+              label="昨天"
+            >
+              <template slot-scope="scope">
+                {{ (scope.row.YesterdayMoney/100) | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="WeekMoney"
+              label="近七天"
+            >
+              <template slot-scope="scope">
+                {{ (scope.row.WeekMoney/100) | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="MonthMoney  "
+              label="近三十天"
+            >
+              <template slot-scope="scope">
+                {{ (scope.row.MonthMoney/100) | toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>
@@ -63,7 +95,7 @@
 </template>
 
 <script>
-  import { fetchList } from '@/api/Zzqp/proxy'
+  import { PlayerList } from '@/api/Zzqp/proxy'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
@@ -102,7 +134,7 @@
     methods: {
       getList() {
         this.listLoading = true
-        fetchList(this.listQuery).then(response => {
+        PlayerList(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false

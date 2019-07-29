@@ -25,21 +25,45 @@
           >
             <el-table-column
               fixed
-              prop="id"
-              label="用户ID"
+              type="index"
+              label="序号"
+            />
+            <el-table-column
+              prop="OrderId"
+              label="订单编号"
+            />
+            <el-table-column
+              prop="AllianceID"
+              label="联盟号"
+            />
+            <el-table-column
+              prop="AllianceName"
+              label="联盟名称"
+            />
+            <el-table-column
+              prop="UserID"
+              label="玩家id"
             />
             <el-table-column
               prop="NickName"
-              label="昵称"
+              label="玩家昵称"
             />
             <el-table-column
-              prop="CardNum"
-              label="房卡数量"
-            />
+              prop="Money"
+              label="充值金额"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.Money/100 }}
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="RechargeTime"
+              prop="InsertTime"
               label="充值时间"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.InsertTime | DateFormat | parseTime }}
+              </template>
+            </el-table-column>
           </el-table>
           <pagination
             v-show="total>0"
@@ -67,14 +91,6 @@ export default {
   filters: {
     DateFormat(str) {
       return parseInt(str.substr(6, 13))
-    },
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
     }
   },
   data() {

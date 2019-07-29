@@ -21,31 +21,39 @@
             :data="list"
             border
             style="width: 100%"
-            max-height="580"
+            max-height="550"
           >
             <el-table-column
               fixed
-              prop="id"
-              label="代理ID"
+              prop="UserID"
+              label="代理id"
             />
             <el-table-column
               prop="NickName"
               label="昵称"
             />
             <el-table-column
-              prop="RegisterTime"
-              label="注册时间"
-            >
-              <template slot-scope="scope">
-                {{ scope.row.RegisterTime | parseTime }}
-              </template>
-            </el-table-column>
-            <el-table-column
               prop="Money"
               label="珍珠数"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money | toThousandFilter }}
+                {{ scope.row.Money/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="CardPoint"
+              label="点卡"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.CardPoint/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="TransData"
+              label="注册时间"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.TransData | DateFormat | parseTime }}
               </template>
             </el-table-column>
           </el-table>
@@ -63,7 +71,7 @@
 </template>
 
 <script>
-  import { fetchList } from '@/api/Zzqp/alliance'
+  import { TransRecord } from '@/api/Zzqp/player'
   import waves from '@/directive/waves' // waves directive
   import {toThousandFilter} from '@/filters'
   import { parseTime } from '@/utils'
@@ -86,23 +94,18 @@
         listQuery: {
           page: 1,
           limit: 10,
-          parentId: 0,
           keyword: ''
         },
         downloadLoading: false
       }
     },
     created() {
-      if (!this.$route.params.id) {
-        this.$router.push('/proxy/list')
-      }
-      this.listQuery.parentId = this.$route.params.id
       this.getList()
     },
     methods: {
       getList() {
         this.listLoading = true
-        fetchList(this.listQuery).then(response => {
+        TransRecord(this.listQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.listLoading = false
