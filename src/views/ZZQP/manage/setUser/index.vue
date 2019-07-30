@@ -23,6 +23,7 @@
             style="width: 100%"
             max-height="550"
             @filter-change="handleFilterChange"
+            @sort-change="sortChange"
           >
             <el-table-column
               fixed
@@ -56,27 +57,30 @@
               ]"
             />
             <el-table-column
-              prop="Money"
+              prop="Score"
+              sortable="custom"
               label="银珍珠"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money/100 | toThousandFilter }}
+                {{ scope.row.Score/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="KingMoney"
+              prop="GoldPearl"
+              sortable="custom"
               label="金珍珠"
             >
               <template slot-scope="scope">
-                {{ scope.row.KingMoney/100 | toThousandFilter }}
+                {{ scope.row.GoldPearl/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="CardNum"
+              prop="CardPoint"
+              sortable="custom"
               label="房卡"
             >
               <template slot-scope="scope">
-                {{ scope.row.CardNum/100 | toThousandFilter }}
+                {{ scope.row.CardPoint/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -103,7 +107,7 @@
                   设置盟主
                 </el-button>
                 <el-button
-                  v-if="((scope.row.RoleMark===1&&scope.row.Money<100)||scope.row.RoleMark===3)"
+                  v-if="((scope.row.RoleMark===1&&scope.row.Score<100)||scope.row.RoleMark===3)"
                   size="mini"
                   type="success"
                   @click="handleSetFuMengZhu(scope.row.UserID)"
@@ -147,11 +151,11 @@
         :model="temp"
         label-position="left"
       >
-        <el-form-item label="银珍珠" prop="Money">
-          <el-input v-model="temp.Money"></el-input>
+        <el-form-item label="银珍珠" prop="Score">
+          <el-input v-model="temp.Score"></el-input>
         </el-form-item>
-        <el-form-item label="房  卡" prop="CardNum">
-          <el-input v-model="temp.CardNum"></el-input>
+        <el-form-item label="房  卡" prop="CardPoint">
+          <el-input v-model="temp.CardPoint"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -202,15 +206,17 @@
           keyword: '',
           state: true,
           Online: false,
-          KindID: []
+          KindID: [],
+          sort:'',
+          sortType: 0
         },
         dialogFormVisible: false,
         rules: {
-          Money: [
+          Score: [
               { required: true, message: '银珍珠为必须项', trigger: 'blur' },
               { validator: valiNumber, trigger: 'blur' }
             ],
-          CardNum: [
+          CardPoint: [
               { required: true, message: '房卡为必须项', trigger: 'blur' },
               { validator: valiNumber, trigger: 'blur' }
             ]
@@ -223,6 +229,16 @@
       this.getList()
     },
     methods: {
+      sortChange(data) {
+        const { prop, order } = data
+        this.sortByID(prop, order)
+      },
+      sortByID(column, order) {
+        const type = { ascending: 0, descending: 1 }
+        this.listQuery.sort = column
+        this.listQuery.sortType = type[order]
+        this.handleFilter()
+      },
       handleFilterChange(filters){
         if(filters['el-table_1_column_1']&&filters['el-table_1_column_1'].length){
           this.listQuery.Online=true
@@ -278,8 +294,8 @@
       },
       handleUpdate(index, row) {
         this.temp = Object.assign({}, row)
-        this.temp.CardNum = 0
-        this.temp.Money = 0
+        this.temp.CardPoint = 0
+        this.temp.Score = 0
 
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -291,8 +307,8 @@
           if (valid) {
             this.loading = true
             const tempData = Object.assign({}, this.temp)
-            tempData.CardNum = tempData.CardNum*100
-            tempData.Money = tempData.Money*100
+            tempData.CardPoint = tempData.CardPoint*100
+            tempData.Score = tempData.Score*100
             update(tempData).then((res) => {
               this.loading = false
               this.dialogFormVisible = false

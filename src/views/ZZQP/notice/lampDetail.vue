@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-card class="box-card" style="width: 600px;">
         <el-form label-width="180px" label-position="left">
-          <el-form-item label="次数次(-1代表无限次):">
+          <el-form-item label="次数(0代表无限次):">
             <el-input-number
               v-model="formPost.Repeat"
             ></el-input-number>

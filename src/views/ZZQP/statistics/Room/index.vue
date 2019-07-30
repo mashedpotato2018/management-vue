@@ -36,6 +36,7 @@
             height="1000px"
             width="100%"
             :list="list"
+            :handel="1"
           />
         </div>
       </el-card>

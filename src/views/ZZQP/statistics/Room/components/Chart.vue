@@ -34,58 +34,55 @@
       Todate:{
         type: String,
         default: '{y}-{m}-{d}'
-      },
-      handel:{
-        type: Number,
-        default: 100
       }
     },
     data() {
       return {
         chart: null,
-        dataList:[],
         lengthList:[],
         nameList:[]
       }
     },
     watch: {
       list() {
-        // 房间id
-        const serverList = [...new Set(this.list.map(item=>item.ServerID))]
-        this.dataList = []
-        this.nameList = []
-        serverList.forEach(item=>{
-          let subArr = this.list.filter(i=>{
-            return i.ServerID === item
+
+        this.list.forEach((item)=>{
+          item.data.forEach((i)=>{
+            i.Date = parseTime(this.DateFormat(i.Date), this.Todate)
           })
-          let data = subArr.map(i=>{
-            let obj = {
-              Date: parseTime(this.DateFormat(i.Date), this.Todate),
-              Count: i.Count/this.handel
-            }
-            return obj
-          })
-          let arr = {
-            ServerID: subArr[0].ServerID,
-            ServerName: subArr[0].ServerName,
-            data
-          }
-          this.dataList.push(arr)
-          this.nameList.push(arr.ServerName)
         })
 
-        this.lengthList = this.dataList.sort((before,after) => after.data.length-before.data.length)[0]
-          .data
-          .map(item=> item.Date).sort((before,after)=> new Date(before) - new Date(after))
+        const arr  = new Array(...this.list)
+        this.nameList = arr.map(item=>item.ServerName)
+        this.lengthList = arr.sort((before,after)=>after.dataLen-before.dataLen)[0]
+          .data.map(item=>item.Date)
 
-        this.dataList.forEach((item)=>{
-          item.data.forEach((i,index)=>{
-            if(i.Date !== this.lengthList[index])
-            {
-              item.data.push({Date:this.lengthList[index],Count:0})
+        this.list.forEach((item)=>{
+          this.lengthList.forEach((i)=>{
+            if(!item.data.some((j=>j.Date===i))){
+              item.data.push({Date:i,Count:0})
             }
           })
+          item.data.sort((before,after)=>new Date(before.Date) - new Date(after.Date))
         })
+
+        let lengthListAll = []
+        this.list.forEach(item=>{
+          item.data.forEach(i=>{
+            lengthListAll.push(i.Date)
+          })
+        })
+
+        this.lengthList = [...new Set(lengthListAll)].sort((before,after)=>new Date(before) - new Date(after))
+        this.list.forEach((item)=>{
+          this.lengthList.forEach((i)=>{
+            if(!item.data.some((j=>j.Date===i))){
+              item.data.push({Date:i,Count:0})
+            }
+          })
+          item.data.sort((before,after)=>new Date(before.Date) - new Date(after.Date))
+        })
+
         this.initChart()
         return this.list
       }
@@ -122,7 +119,8 @@
             data: this.nameList
           }
         }
-        const seriesArr = this.dataList.sort((before,after)=>before.ServerID-after.ServerID).map(item=>{
+        const arr  = new Array(...this.list)
+        const seriesArr = arr.sort((before,after)=>before.ServerID-after.ServerID).map(item=>{
           let obj = {
             type: 'bar',
             data: item.data.map(item=>item.Count),
