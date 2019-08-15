@@ -31,7 +31,11 @@
             <el-table-column
               prop="NickName"
               label="昵称"
-            />
+            >
+              <template slot-scope="scope">
+                {{ scope.row.NickName }}<span v-if="scope.row.isAgent">(代理)</span>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="HeadImg"
               label="头像"
@@ -45,7 +49,7 @@
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{scope.row.RegisterTime | DateFormat |parseTime}}
+                {{ scope.row.RegisterTime | DateFormat |parseTime }}
               </template>
             </el-table-column>
           </el-table>
@@ -59,15 +63,15 @@
               type="index"
               label="序号"
               align="center"
-              width="100">
-            </el-table-column>
+              width="100"
+            />
             <el-table-column
               align="center"
               prop="startTime"
               label="开始时间"
             >
               <template slot-scope="scope">
-                {{scope.row.startTime |DateFormat|parseTime}}
+                {{ scope.row.startTime |DateFormat|parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -76,19 +80,19 @@
               label="珍珠数"
             >
               <template slot-scope="scope">
-                {{(scope.row.LendMark?scope.row.Money/100:scope.row.Money/100 * -1)|toThousandFilter}}
+                {{ scope.row.Money/100|toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="proxyId"
-              label="代理id"
-              align="center">
-            </el-table-column>
+              prop="UserID"
+              label="用户id"
+              align="center"
+            />
             <el-table-column
-              prop="proxyNickName"
-              label="代理昵称"
-              align="center">
-            </el-table-column>
+              prop="NickName"
+              label="用户昵称"
+              align="center"
+            />
           </el-table>
           <pagination
             v-show="total>0"
@@ -104,55 +108,23 @@
 </template>
 
 <script>
-  import { score } from '@/api/Zzqp/player'
-  import waves from '@/directive/waves' // waves directive
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-  import { toThousandFilter } from '@/filters'
-
-  export default {
-    name: 'ComplexTable',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
-    },
-    data() {
-      return {
-        list: [],
-        basic:[],
-        isShow:false,
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          page: 1,
-          limit: 10,
-          keyword:''
-        },
-        downloadLoading: false
-      }
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        score(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.basic = response.data.basic
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
-    },
-    watch:{
-      basic(newVal){
-        this.isShow = newVal.length>0
-      }
+import { score } from '@/api/Zzqp/player'
+import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
+import mixins from '../../mixins/RecordQuery'
+export default {
+  name: 'ComplexTable',
+  mixins: [mixins],
+  methods: {
+    getList() {
+      this.listLoading = true
+      score(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.basic = response.data.basic
+        this.total = response.data.total
+        this.listLoading = false
+      })
     }
   }
+}
 </script>

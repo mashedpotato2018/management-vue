@@ -8,15 +8,15 @@
 </template>
 
 <script>
-  import { GetRegister } from '@/api/Zzqp/statistics'
-  import dataLine from '@/components/Line'
-  export default {
-    name:'Register',
-    components:{dataLine},
-    methods:{
-      GetRegister
-    }
+import { GetRegister } from '@/api/Zzqp/statistics'
+import dataLine from '@/components/Line'
+export default {
+  name: 'Register',
+  components: { dataLine },
+  methods: {
+    GetRegister
   }
+}
 </script>
 
 <style scoped>

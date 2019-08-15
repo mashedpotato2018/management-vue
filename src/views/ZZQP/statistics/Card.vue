@@ -7,15 +7,15 @@
 </template>
 
 <script>
-  import { GetCard } from '@/api/Zzqp/statistics'
-  import dataLine from '@/components/Line'
-  export default {
-    name:'Card',
-    components:{dataLine},
-    methods:{
-      GetCard
-    }
+import { GetCard } from '@/api/Zzqp/statistics'
+import dataLine from '@/components/Line'
+export default {
+  name: 'Card',
+  components: { dataLine },
+  methods: {
+    GetCard
   }
+}
 </script>
 
 <style scoped>

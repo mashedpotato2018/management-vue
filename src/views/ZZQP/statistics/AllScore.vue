@@ -7,15 +7,15 @@
 </template>
 
 <script>
-  import { AllScore } from '@/api/Zzqp/statistics'
-  import dataLine from '@/components/LineV2'
-  export default {
-    name:'AllScore',
-    components:{dataLine},
-    methods:{
-      AllScore
-    }
+import { AllScore } from '@/api/Zzqp/statistics'
+import dataLine from '@/components/LineV2'
+export default {
+  name: 'AllScore',
+  components: { dataLine },
+  methods: {
+    AllScore
   }
+}
 </script>
 
 <style scoped>

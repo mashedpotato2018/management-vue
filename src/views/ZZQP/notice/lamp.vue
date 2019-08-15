@@ -43,18 +43,20 @@
               label="创建时间"
             >
               <template slot-scope="scope">
-                {{scope.row.CreateDate|DateFormat|parseTime}}
+                {{ scope.row.CreateDate|DateFormat|parseTime }}
               </template>
             </el-table-column>
             <el-table-column label="操作" width="160">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
-                  @click="handleEdit(scope.row)">编辑</el-button>
+                  @click="handleEdit(scope.row)"
+                >编辑</el-button>
                 <el-button
                   size="mini"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                  @click="handleDelete(scope.$index, scope.row)"
+                >删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -72,69 +74,68 @@
 </template>
 
 <script>
-  import { LampList,DelLamp } from '@/api/Zzqp/notice'
-  import waves from '@/directive/waves' // waves directive
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-  export default {
-    name: 'lamp',
-    components: { Pagination },
-    directives: { waves },
-    filters:{
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
+import { LampList, DelLamp } from '@/api/Zzqp/notice'
+import waves from '@/directive/waves' // waves directive
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+export default {
+  name: 'Lamp',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    }
+  },
+  data() {
+    return {
+      list: [],
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 10
+      },
+      downloadLoading: false
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      LampList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
     },
-    data() {
-      return {
-        list: [],
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          page: 1,
-          limit: 10,
-        },
-        downloadLoading: false
-      }
-    },
-    created() {
+    handleFilter() {
+      this.listQuery.page = 1
       this.getList()
     },
-    methods: {
-      getList() {
-        this.listLoading = true
-        LampList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      },
-      handleDelete(index, row) {
-        DelLamp({ID:row.ID}).then(res=>{
-          if(res.code===20000)
-          {
-            this.$notify({
-              title: '成功',
-              message: res.Message,
-              type: '成功',
-              duration: 2000
-            })
-            this.handleFilter()
-          }
-        })
-      },
-      handleEdit(row){
-        this.$router.push({name:'lampDetail',params:{lamp:row}})
-      },
-      handleAdd(){
-        this.$router.push({name:'lampDetail'})
-      }
+    handleDelete(index, row) {
+      DelLamp({ ID: row.ID }).then(res => {
+        if (res.code === 20000) {
+          this.$notify({
+            title: '成功',
+            message: res.Message,
+            type: '成功',
+            duration: 2000
+          })
+          this.handleFilter()
+        }
+      })
+    },
+    handleEdit(row) {
+      this.$router.push({ name: 'lampDetail', params: { lamp: row }})
+    },
+    handleAdd() {
+      this.$router.push({ name: 'lampDetail' })
     }
   }
+}
 </script>
 
 <style scoped>

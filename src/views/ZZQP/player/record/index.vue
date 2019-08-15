@@ -5,12 +5,27 @@
         <div>
           <el-input
             v-model="listQuery.keyword"
-            placeholder="用户id/昵称"
+            placeholder="用户id"
             style="width: 200px;"
-            class="filter-item"
             @keyup.enter.native="handleFilter"
           />
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-date-picker
+            v-model="listQuery.bTime"
+            align="right"
+            type="date"
+            style="margin-bottom: 10px"
+            placeholder="开始时间"
+            :picker-options="pickerOptions"
+          />
+          <el-date-picker
+            v-model="listQuery.eTime"
+            align="right"
+            style="margin-bottom: 10px"
+            type="date"
+            placeholder="结束时间"
+            :picker-options="pickerOptions"
+          />
+          <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
         </div>
@@ -41,11 +56,19 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="Score"
+              label="总输赢"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.Score/100|toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="RegisterTime"
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{scope.row.RegisterTime |DateFormat|parseTime}}
+                {{ scope.row.RegisterTime |DateFormat|parseTime }}
               </template>
             </el-table-column>
           </el-table>
@@ -57,36 +80,36 @@
           >
             <el-table-column type="expand">
               <template slot-scope="props">
-                <span class="expand" v-if="props.row.NickName_0">{{ props.row.NickName_0 }}: {{props.row.GameScore_0/100|toThousandFilter}}</span>
-                <span class="expand" v-if="props.row.NickName_1">{{ props.row.NickName_1 }}: {{props.row.GameScore_1/100|toThousandFilter}}</span>
-                <span class="expand" v-if="props.row.NickName_2">{{ props.row.NickName_2 }}: {{props.row.GameScore_2/100|toThousandFilter}}</span>
-                <span class="expand" v-if="props.row.NickName_3">{{ props.row.NickName_3 }}: {{props.row.GameScore_3/100|toThousandFilter}}</span>
-                <span class="expand" v-if="props.row.NickName_4">{{ props.row.NickName_4 }}: {{props.row.GameScore_4/100|toThousandFilter}}</span>
+                <span v-if="props.row.NickName_0" class="expand">{{ props.row.NickName_0 }}: {{ props.row.GameScore_0/100|toThousandFilter }}</span>
+                <span v-if="props.row.NickName_1" class="expand">{{ props.row.NickName_1 }}: {{ props.row.GameScore_1/100|toThousandFilter }}</span>
+                <span v-if="props.row.NickName_2" class="expand">{{ props.row.NickName_2 }}: {{ props.row.GameScore_2/100|toThousandFilter }}</span>
+                <span v-if="props.row.NickName_3" class="expand">{{ props.row.NickName_3 }}: {{ props.row.GameScore_3/100|toThousandFilter }}</span>
+                <span v-if="props.row.NickName_4" class="expand">{{ props.row.NickName_4 }}: {{ props.row.GameScore_4/100|toThousandFilter }}</span>
               </template>
             </el-table-column>
             <el-table-column
               type="index"
               label="序号"
               align="center"
-              width="100">
-            </el-table-column>
+              width="100"
+            />
             <el-table-column
               label="编号"
               align="center"
-              prop="DrawID">
-            </el-table-column>
+              prop="DrawID"
+            />
             <el-table-column
               label="房间名"
               align="center"
-              prop="ServerName">
-            </el-table-column>
+              prop="ServerName"
+            />
             <el-table-column
               align="center"
               prop="InsretDate"
               label="开始时间"
             >
               <template slot-scope="scope">
-                {{scope.row.InsretDate | DateFormat | parseTime}}
+                {{ scope.row.InsretDate | DateFormat | parseTime }}
               </template>
             </el-table-column>
           </el-table>
@@ -104,57 +127,25 @@
 </template>
 
 <script>
-  import { record } from '@/api/Zzqp/player'
-  import waves from '@/directive/waves' // waves directive
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-  import { toThousandFilter } from '@/filters'
-
-  export default {
-    name: 'ComplexTable',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
-    },
-    data() {
-      return {
-        list: [],
-        basic:[],
-        isShow:false,
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          page: 1,
-          limit: 10,
-          keyword:''
-        },
-        downloadLoading: false
-      }
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        record(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.basic = response.data.basic
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
-    },
-    watch:{
-      basic(newVal){
-        this.isShow = newVal.length>0
-      }
+import { record } from '@/api/Zzqp/player'
+import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
+import mixins from '../../mixins/RecordQuery'
+export default {
+  name: 'ComplexTable',
+  mixins: [mixins],
+  methods: {
+    getList() {
+      this.listLoading = true
+      record(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.basic = response.data.basic
+        this.total = response.data.total
+        this.listLoading = false
+      })
     }
   }
+}
 </script>
 <style scoped>
   .expand{

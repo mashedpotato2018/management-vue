@@ -66,7 +66,7 @@
               label="剩余金币"
             >
               <template slot-scope="scope">
-                {{scope.row.Money|toThousandFilter}}
+                {{ scope.row.Money|toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>
@@ -85,7 +85,7 @@
               label="变化前金币"
             >
               <template slot-scope="scope">
-                {{scope.row.BeforScore/100|toThousandFilter}}
+                {{ scope.row.BeforScore/100|toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -94,10 +94,10 @@
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.ModifyScore<0" style="color: red;">
-                  {{scope.row.ModifyScore/100|toThousandFilter}}
+                  {{ scope.row.ModifyScore/100|toThousandFilter }}
                 </span>
                 <span v-else style="color: green;">
-                  {{scope.row.ModifyScore/100|toThousandFilter}}
+                  {{ scope.row.ModifyScore/100|toThousandFilter }}
                 </span>
               </template>
             </el-table-column>
@@ -106,7 +106,7 @@
               label="变后金币"
             >
               <template slot-scope="scope">
-                {{scope.row.LaterScore/100|toThousandFilter}}
+                {{ scope.row.LaterScore/100|toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -114,7 +114,7 @@
               label="操作时间"
             >
               <template slot-scope="scope">
-                {{scope.row.InsertTime|DateFormat|parseTime}}
+                {{ scope.row.InsertTime|DateFormat|parseTime }}
               </template>
             </el-table-column>
           </el-table>
@@ -132,22 +132,22 @@
 </template>
 
 <script>
-  import { changeQuery } from '@/api/KXM/player'
-  import { toThousandFilter } from '@/filters'
-  import query from '../mixins/query'
-  export default {
-    name: 'change',
-    mixins: [query],
-    methods:{
-      getList() {
-        this.listLoading = true
-        changeQuery(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.basic = response.data.basic
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      }
+import { changeQuery } from '@/api/KXM/player'
+import { toThousandFilter } from '@/filters'
+import query from '../mixins/query'
+export default {
+  name: 'Change',
+  mixins: [query],
+  methods: {
+    getList() {
+      this.listLoading = true
+      changeQuery(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.basic = response.data.basic
+        this.total = response.data.total
+        this.listLoading = false
+      })
     }
   }
+}
 </script>

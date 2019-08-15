@@ -38,7 +38,7 @@
             :list="list"
             :title="title"
             :unit="unit"
-            :Todate="Todate"
+            :todate="Todate"
             :handle="handle"
           />
         </div>
@@ -53,10 +53,10 @@ import { parseTime } from '@/utils'
 import Chart from './components/Charts/LineMarker'
 
 export default {
-  name: 'dataLine',
+  name: 'DataLine',
   components: { Chart },
   directives: { waves },
-  props:{
+  props: {
     unit: {
       type: String,
       default: ''
@@ -69,18 +69,18 @@ export default {
       type: Function,
       default: null
     },
-    handle:{
+    handle: {
       type: Number,
       default: 100
     },
-    Todate:{
+    todate: {
       type: String,
       default: '{y}-{m}-{d}'
     }
   },
   data() {
     return {
-      date:'date',
+      date: 'date',
       list: null,
       listLoading: true,
       listQuery: {
@@ -122,10 +122,10 @@ export default {
     getList() {
       this.listLoading = true
       this.query(this.listQuery)
-      .then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
+        .then(response => {
+          this.list = response.data.items
+          this.listLoading = false
+        })
     },
     handleFilter() {
       this.getList()

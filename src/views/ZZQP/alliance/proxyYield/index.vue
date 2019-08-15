@@ -38,11 +38,21 @@
             />
             <el-table-column
               prop="Money"
-              label="收益贡献"
+              label="珍珠数"
               align="center"
             >
               <template slot-scope="scope">
                 {{ scope.row.Money/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="Money"
+              label="房卡"
+              align="center"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.CardPoint/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -84,55 +94,55 @@
 </template>
 
 <script>
-  import { ProxyList } from '@/api/Zzqp/alliance'
-  import waves from '@/directive/waves' // waves directive
-  import {toThousandFilter} from '@/filters'
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { ProxyList } from '@/api/Zzqp/alliance'
+import waves from '@/directive/waves' // waves directive
+import { toThousandFilter } from '@/filters'
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-  export default {
-    name: 'proxyYield',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
-    },
-    data() {
-      return {
-        list: [],
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          parentId: 0,
-          page: 1,
-          limit: 10,
-          keyword: ''
-        },
-        downloadLoading: false
-      }
-    },
-    created() {
-      if (!this.$route.params.id) {
-        this.$router.push('/alliance/list')
-      }
-      this.listQuery.parentId = this.$route.params.id
-      this.getList()
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        ProxyList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        })
+export default {
+  name: 'ProxyYield',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    }
+  },
+  data() {
+    return {
+      list: [],
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        parentId: 0,
+        page: 1,
+        limit: 10,
+        keyword: ''
       },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
+      downloadLoading: false
+    }
+  },
+  created() {
+    if (!this.$route.params.id) {
+      this.$router.push('/alliance/list')
+    }
+    this.listQuery.parentId = this.$route.params.id
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      ProxyList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
     }
   }
+}
 </script>

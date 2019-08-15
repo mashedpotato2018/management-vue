@@ -8,15 +8,15 @@
 </template>
 
 <script>
-  import { GetLogon } from '@/api/Zzqp/statistics'
-  import dataLine from '@/components/Line'
-  export default {
-    name:'Logon',
-    components:{dataLine},
-    methods:{
-      GetLogon
-    }
+import { GetLogon } from '@/api/Zzqp/statistics'
+import dataLine from '@/components/Line'
+export default {
+  name: 'Logon',
+  components: { dataLine },
+  methods: {
+    GetLogon
   }
+}
 </script>
 
 <style scoped>

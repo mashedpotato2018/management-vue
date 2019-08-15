@@ -7,7 +7,7 @@
 // export const errorLog = 'production'
 
 module.exports = {
-  title:'管理后台',
+  title: '管理后台',
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel

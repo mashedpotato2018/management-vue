@@ -48,7 +48,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{scope.row.AppliedAmount/100 | toThousandFilter }}
+                {{ scope.row.AppliedAmount/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -57,7 +57,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{scope.row.ActualAmount/100 | toThousandFilter }}
+                {{ scope.row.ActualAmount/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -65,7 +65,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{`[${scope.row.RealName}]${scope.row.Province}-${scope.row.CardType}(${scope.row.CardNo})` }}
+                {{ `[${scope.row.RealName}]${scope.row.Province}-${scope.row.CardType}(${scope.row.CardNo})` }}
               </template>
             </el-table-column>
             <el-table-column
@@ -74,7 +74,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                 {{scope.row.ApplyDate|DateFormat|parseTime }}
+                {{ scope.row.ApplyDate|DateFormat|parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -168,16 +168,16 @@ export default {
       rules: {
         state: [{ required: true, message: '处理结果为必须项', trigger: 'change' }]
       },
-      temp:{
+      temp: {
         state: 1
       }
     }
   },
   created() {
     this.getList()
-    setInterval(()=>{
+    setInterval(() => {
       this.handleFilter()
-    },10000)
+    }, 10000)
   },
   methods: {
     getList() {

@@ -85,15 +85,17 @@
                   v-if="scope.row.Nullity===1"
                   size="mini"
                   type="warning"
-                  @click="handleUpdate(scope.$index, scope.row)">
-                  {{scope.row.Nullity|status}}
+                  @click="handleUpdate(scope.$index, scope.row)"
+                >
+                  {{ scope.row.Nullity|status }}
                 </el-button>
                 <el-button
                   v-else
                   size="mini"
                   type="danger"
-                  @click="handleUpdate(scope.$index, scope.row)">
-                  {{scope.row.Nullity|status}}
+                  @click="handleUpdate(scope.$index, scope.row)"
+                >
+                  {{ scope.row.Nullity|status }}
                 </el-button>
               </template>
             </el-table-column>
@@ -112,7 +114,7 @@
 </template>
 
 <script>
-import { fetchList,banned } from '@/api/KXM/player'
+import { fetchList, banned } from '@/api/KXM/player'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import { toThousandFilter } from '@/filters'
@@ -126,8 +128,8 @@ export default {
     DateFormat(str) {
       return parseInt(str.substr(6, 13))
     },
-    status(state){
-      const type = {0:'封禁',1:'解封'}
+    status(state) {
+      const type = { 0: '封禁', 1: '解封' }
       return type[state]
     }
   },
@@ -173,16 +175,17 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    handleUpdate(index,row){
+    handleUpdate(index, row) {
       const value = Number(!row.Nullity)
-      banned({id: row.id, value}).then(res=>{
-        if(res.code===20000)
+      banned({ id: row.id, value }).then(res => {
+        if (res.code === 20000) {
           this.$notify({
             title: '成功',
             message: '操作成功',
             type: '成功',
             duration: 2000
           })
+        }
         this.handleFilter()
       })
     }

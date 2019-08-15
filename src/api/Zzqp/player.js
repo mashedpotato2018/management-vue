@@ -43,7 +43,6 @@ export function UserList(data) {
   })
 }
 
-
 // 设置数据
 export function update(data) {
   return request({
@@ -53,7 +52,7 @@ export function update(data) {
   })
 }
 
-//封禁
+// 封禁
 export function banned(data) {
   return request({
     url: '/player/banned',
@@ -62,16 +61,7 @@ export function banned(data) {
   })
 }
 
-//冻结
-export function freeze(data) {
-  return request({
-    url: '/player/freeze',
-    method: 'post',
-    data
-  })
-}
-
-//设置盟主
+// 设置盟主
 export function SetMengZhu(data) {
   return request({
     url: '/player/SetMengZhu',
@@ -80,12 +70,21 @@ export function SetMengZhu(data) {
   })
 }
 
-//设置副盟主
+// 设置副盟主
 export function SetFuMengZhu(data) {
   return request({
     url: '/player/SetFuMengZhu',
     method: 'post',
     data
+  })
+}
+
+// 金币变化详情
+export function ChangeScoreList(data) {
+  return request({
+    url: '/player/ChangeScore',
+    method: 'get',
+    params: data
   })
 }
 

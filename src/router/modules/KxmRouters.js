@@ -1,6 +1,6 @@
 import Layout from '@/layout'
 
-const KxmRouters = [
+const viewRouters = [
   {
     path: '/',
     component: Layout,
@@ -96,12 +96,25 @@ const KxmRouters = [
   {
     path: '/PlayersCrunchies',
     component: Layout,
+    meta: { title: '榜单', icon: 'nested', affix: false },
     children: [
       {
         path: 'list',
         component: () => import('@/views/Kxm/PlayersCrunchies/index'),
         name: 'PlayersCrunchies',
-        meta: { title: '玩家输赢榜', icon: 'nested', affix: false }
+        meta: { title: '输赢榜', affix: false }
+      },
+      {
+        path: 'dividend',
+        component: () => import('@/views/Kxm/dividend/index'),
+        name: 'dividend',
+        meta: { title: '红利榜', affix: false }
+      },
+      {
+        path: 'transaction',
+        component: () => import('@/views/Kxm/transaction/index'),
+        name: 'transaction',
+        meta: { title: '手数榜', affix: false }
       }
     ]
   },
@@ -141,34 +154,6 @@ const KxmRouters = [
       }
     ]
   },
-  // {
-  //   path: '/Champions',
-  //   components: Layout,
-  //   meta: { title: '盟主生成和管理', icon: 'dashboard', affix: false },
-  //   name: 'Champions',
-  //   redirect: '/Champions/list',
-  //   children: [
-  //     {
-  //       path: 'list',
-  //       components: () => import('@/views/Kxm/Champions/list'),
-  //       name: 'list',
-  //       meta: { title: '盟主列表' }
-  //     },
-  //     {
-  //       path: 'set',
-  //       components: () => import('@/views/Kxm/Champions/set'),
-  //       name: 'set',
-  //       meta: { title: '盟主管理' }
-  //     },
-  //     {
-  //       path: 'changePassword',
-  //       components: () => import('@/views/Kxm/Champions/changePassword'),
-  //       name: 'changePassword',
-  //       meta: { title: '修改面密码' },
-  //       hidden: true
-  //     }
-  //   ]
-  // },
   {
     path: '/notice',
     component: Layout,
@@ -178,6 +163,25 @@ const KxmRouters = [
         component: () => import('@/views/Kxm/notice/index'),
         name: 'notice',
         meta: { title: '公告配置', icon: 'edit', affix: false }
+      }
+    ]
+  },
+  {
+    path: '/horse',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/Kxm/horse/index'),
+        name: 'horseList',
+        meta: { title: '跑马灯', icon: 'horse-lamp', affix: false }
+      },
+      {
+        path: 'set',
+        component: () => import('@/views/Kxm/horse/set'),
+        name: 'setHorse',
+        meta: { title: '设置跑马灯', affix: false },
+        hidden: true
       }
     ]
   },
@@ -204,6 +208,6 @@ const KxmRouters = [
         meta: { title: '黑名单', icon: 'backList', affix: false }
       }
     ]
-  },
+  }
 ]
-export default KxmRouters
+export default viewRouters

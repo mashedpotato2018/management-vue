@@ -7,15 +7,15 @@
 </template>
 
 <script>
-  import { GetAgentProfit } from '@/api/Zzqp/statistics'
-  import dataLine from '@/components/Line'
-  export default {
-    name:'Agent',
-    components:{dataLine},
-    methods:{
-      GetAgentProfit
-    }
+import { GetAgentProfit } from '@/api/Zzqp/statistics'
+import dataLine from '@/components/Line'
+export default {
+  name: 'Agent',
+  components: { dataLine },
+  methods: {
+    GetAgentProfit
   }
+}
 </script>
 
 <style scoped>

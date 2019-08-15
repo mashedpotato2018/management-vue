@@ -66,7 +66,7 @@
               label="剩余金币"
             >
               <template slot-scope="scope">
-                {{scope.row.Money|toThousandFilter}}
+                {{ scope.row.Money|toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>
@@ -81,7 +81,7 @@
               label="开始时间"
             >
               <template slot-scope="scope">
-                {{scope.row.startTime|DateFormat|parseTime}}
+                {{ scope.row.startTime|DateFormat|parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -90,10 +90,10 @@
             >
               <template slot-scope="scope">
                 <span v-if="scope.row.TotalWinLose<0" style="color: red;">
-                  {{scope.row.TotalWinLose/100|toThousandFilter}}
+                  {{ scope.row.TotalWinLose/100|toThousandFilter }}
                 </span>
                 <span v-else style="color: green;">
-                  {{scope.row.TotalWinLose/100|toThousandFilter}}
+                  {{ scope.row.TotalWinLose/100|toThousandFilter }}
                 </span>
               </template>
             </el-table-column>
@@ -116,22 +116,22 @@
 </template>
 
 <script>
-  import { combatQuery } from '@/api/KXM/player'
-  import { toThousandFilter } from '@/filters'
-  import query from '../mixins/query'
-  export default {
-    name: 'change',
-    mixins: [query],
-    methods:{
-      getList() {
-        this.listLoading = true
-        combatQuery(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.basic = response.data.basic
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      }
+import { combatQuery } from '@/api/KXM/player'
+import { toThousandFilter } from '@/filters'
+import query from '../mixins/query'
+export default {
+  name: 'Change',
+  mixins: [query],
+  methods: {
+    getList() {
+      this.listLoading = true
+      combatQuery(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.basic = response.data.basic
+        this.total = response.data.total
+        this.listLoading = false
+      })
     }
   }
+}
 </script>

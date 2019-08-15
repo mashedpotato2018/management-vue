@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import { ChangePwd } from '@/api/KXM/champions'
+import { ChangePwd } from '@/api/KXM/champions'
 export default {
   data() {
     const validatePass = (rule, value, callback) => {
@@ -85,7 +85,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.loading = true
-          ChangePwd(this.ruleForm).then(()=>{
+          ChangePwd(this.ruleForm).then(() => {
             this.$notify({
               title: '成功',
               message: '修改成功',

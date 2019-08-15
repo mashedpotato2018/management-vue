@@ -16,7 +16,7 @@
             <el-radio v-model="ruleForm.Gender" label="0">女</el-radio>
           </el-form-item>
           <el-form-item label="密码" prop="LogonPass">
-            <el-input v-model="ruleForm.LogonPass" style="width: 200px;" show-password></el-input>
+            <el-input v-model="ruleForm.LogonPass" style="width: 200px;" show-password />
           </el-form-item>
           <el-form-item label="手机号码" prop="TelNo">
             <el-input v-model="ruleForm.TelNo" style="width: 200px;" />
@@ -45,13 +45,13 @@
 </template>
 
 <script>
-  import { Setchampions } from '@/api/KXM/champions'
-  import { parseTime } from '@/utils'
+import { Setchampions } from '@/api/KXM/champions'
+import { parseTime } from '@/utils'
 export default {
   data() {
     const checkPhone = (rule, value, callback) => {
       setTimeout(() => {
-        if (value!=''&&!/^1[34578]\d{9}$/.test(value)) {
+        if (value != '' && !/^1[34578]\d{9}$/.test(value)) {
           callback(new Error('请输入正确的手机号'))
         } else {
           callback()
@@ -60,7 +60,7 @@ export default {
     }
     const checkIdCard = (rule, value, callback) => {
       setTimeout(() => {
-        if (value!=''&&!/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)) {
+        if (value != '' && !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)) {
           callback(new Error('请输入正确的身份证号码'))
         } else {
           callback()
@@ -110,14 +110,13 @@ export default {
               type: '成功',
               duration: 2000
             })
-          }).then(()=>{
+          }).then(() => {
             this.loading = false
             this.$router.push('/Champions/list')
           })
             .catch(() => {
               this.loading = false
             })
-
         } else {
           return false
         }

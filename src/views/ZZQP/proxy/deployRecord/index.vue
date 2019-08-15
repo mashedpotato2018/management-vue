@@ -7,10 +7,25 @@
             v-model="listQuery.keyword"
             placeholder="用户id"
             style="width: 200px;"
-            class="filter-item"
             @keyup.enter.native="handleFilter"
           />
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-date-picker
+            v-model="listQuery.bTime"
+            align="right"
+            type="date"
+            style="margin-bottom: 10px"
+            placeholder="开始时间"
+            :picker-options="pickerOptions"
+          />
+          <el-date-picker
+            v-model="listQuery.eTime"
+            align="right"
+            style="margin-bottom: 10px"
+            type="date"
+            placeholder="结束时间"
+            :picker-options="pickerOptions"
+          />
+          <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
         </div>
@@ -25,7 +40,7 @@
           >
             <el-table-column
               fixed
-              prop="UserId"
+              prop="UserID"
               label="用户ID"
             />
             <el-table-column
@@ -41,11 +56,29 @@
               </template>
             </el-table-column>
             <el-table-column
+              align="center"
+              prop="add"
+              label="总增加"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.add/100|toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="reduce"
+              label="总减少"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.reduce/100|toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="RegisterTime"
               label="注册时间"
             >
               <template slot-scope="scope">
-                {{scope.row.RegisterTime|DateFormat|parseTime}}
+                {{ scope.row.RegisterTime|DateFormat|parseTime }}
               </template>
             </el-table-column>
           </el-table>
@@ -59,15 +92,15 @@
               type="index"
               label="序号"
               align="center"
-              width="100">
-            </el-table-column>
+              width="100"
+            />
             <el-table-column
               align="center"
               prop="startTime"
               label="开始时间"
             >
               <template slot-scope="scope">
-                {{scope.row.Time|DateFormat|parseTime}}
+                {{ scope.row.Time|DateFormat|parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -76,19 +109,19 @@
               label="珍珠数"
             >
               <template slot-scope="scope">
-                {{scope.row.Money/100|toThousandFilter}}
+                {{ scope.row.Money/100|toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
-              prop="DeployId"
+              prop="DeployID"
               label="调配人id"
-              align="center">
-            </el-table-column>
+              align="center"
+            />
             <el-table-column
               prop="DeployNickName"
               label="调配人昵称"
-              align="center">
-            </el-table-column>
+              align="center"
+            />
           </el-table>
           <pagination
             v-show="total>0"
@@ -104,55 +137,23 @@
 </template>
 
 <script>
-  import { deploy } from '@/api/Zzqp/proxy'
-  import waves from '@/directive/waves' // waves directive
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-  import { toThousandFilter } from '@/filters'
-
-  export default {
-    name: 'ComplexTable',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
-    },
-    data() {
-      return {
-        list: [],
-        basic:[],
-        isShow:false,
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          page: 1,
-          limit: 10,
-          keyword:''
-        },
-        downloadLoading: false
-      }
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        deploy(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.basic = response.data.basic
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
-    },
-    watch:{
-      basic(newVal){
-        this.isShow = newVal.length>0
-      }
+import { deploy } from '@/api/Zzqp/proxy'
+import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
+import mixins from '../../mixins/RecordQuery'
+export default {
+  name: 'ComplexTable',
+  mixins: [mixins],
+  methods: {
+    getList() {
+      this.listLoading = true
+      deploy(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.basic = response.data.basic
+        this.total = response.data.total
+        this.listLoading = false
+      })
     }
   }
+}
 </script>

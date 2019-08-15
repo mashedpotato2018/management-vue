@@ -48,7 +48,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{scope.row.AppliedAmount/100 | toThousandFilter }}
+                {{ scope.row.AppliedAmount/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -57,7 +57,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{scope.row.ActualAmount/100 | toThousandFilter }}
+                {{ scope.row.ActualAmount/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -65,7 +65,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{`[${scope.row.RealName}]${scope.row.Province}-${scope.row.CardType}(${scope.row.CardNo})` }}
+                {{ `[${scope.row.RealName}]${scope.row.Province}-${scope.row.CardType}(${scope.row.CardNo})` }}
               </template>
             </el-table-column>
             <el-table-column
@@ -74,7 +74,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                {{scope.row.ApplyDate|DateFormat|parseTime }}
+                {{ scope.row.ApplyDate|DateFormat|parseTime }}
               </template>
             </el-table-column>
             <el-table-column
@@ -131,7 +131,7 @@ export default {
       const type = { 1: '同意', 2: '拒绝' }
       return type[val]
     },
-    statusFilter(val){
+    statusFilter(val) {
       const type = { 1: 'success', 2: 'danger' }
       return type[val]
     }

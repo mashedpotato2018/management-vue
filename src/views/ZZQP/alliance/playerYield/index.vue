@@ -80,55 +80,55 @@
 </template>
 
 <script>
-  import { PlayerList } from '@/api/Zzqp/alliance'
-  import waves from '@/directive/waves' // waves directive
-  import {toThousandFilter} from '@/filters'
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { PlayerList } from '@/api/Zzqp/alliance'
+import waves from '@/directive/waves' // waves directive
+import { toThousandFilter } from '@/filters'
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-  export default {
-    name: 'ComplexTable',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
-    },
-    data() {
-      return {
-        list: [],
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          parentId:0,
-          page: 1,
-          limit: 10,
-          keyword: ''
-        },
-        downloadLoading: false
-      }
-    },
-    created() {
-      if (!this.$route.params.id) {
-        this.$router.push('/alliance/list')
-      }
-      this.listQuery.parentId = this.$route.params.id
-      this.getList()
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        PlayerList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        })
+export default {
+  name: 'ComplexTable',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    }
+  },
+  data() {
+    return {
+      list: [],
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        parentId: 0,
+        page: 1,
+        limit: 10,
+        keyword: ''
       },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
+      downloadLoading: false
+    }
+  },
+  created() {
+    if (!this.$route.params.id) {
+      this.$router.push('/alliance/list')
+    }
+    this.listQuery.parentId = this.$route.params.id
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      PlayerList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
     }
   }
+}
 </script>

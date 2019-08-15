@@ -22,6 +22,7 @@
             border
             style="width: 100%"
             max-height="580"
+            @sort-change="sortChange"
           >
             <el-table-column
               fixed
@@ -38,11 +39,22 @@
             />
             <el-table-column
               prop="Money"
-              label="收益贡献"
+              label="珍珠数"
               align="center"
+              sortable="custom"
             >
               <template slot-scope="scope">
                 {{ scope.row.Money/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="Money"
+              label="房卡"
+              align="center"
+              sortable="custom"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.CardPoint/100 | toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -84,55 +96,66 @@
 </template>
 
 <script>
-  import { allianceList } from '@/api/Zzqp/alliance'
-  import waves from '@/directive/waves' // waves directive
-  import {toThousandFilter} from '@/filters'
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { allianceList } from '@/api/Zzqp/alliance'
+import waves from '@/directive/waves' // waves directive
+import { toThousandFilter } from '@/filters'
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-  export default {
-    name: 'allianceYield',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
+export default {
+  name: 'AllianceYield',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    }
+  },
+  data() {
+    return {
+      list: [],
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        parentId: 0,
+        page: 1,
+        limit: 10,
+        keyword: '',
+        sort: 0
+      },
+      downloadLoading: false
+    }
+  },
+  created() {
+    if (!this.$route.params.id) {
+      this.$router.push('/alliance/list')
+    }
+    this.listQuery.parentId = this.$route.params.id
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      allianceList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
     },
-    data() {
-      return {
-        list: [],
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          parentId: 0,
-          page: 1,
-          limit: 10,
-          keyword: ''
-        },
-        downloadLoading: false
-      }
-    },
-    created() {
-      if (!this.$route.params.id) {
-        this.$router.push('/alliance/list')
-      }
-      this.listQuery.parentId = this.$route.params.id
+    handleFilter() {
+      this.listQuery.page = 1
       this.getList()
     },
-    methods: {
-      getList() {
-        this.listLoading = true
-        allianceList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
+    sortChange(data) {
+      const { prop, order } = data
+      this.sortByID(prop, order)
+    },
+    sortByID(column, order) {
+      const type = { ascending: 0, descending: 1 }
+      this.listQuery.sort = column
+      this.listQuery.sortType = type[order]
+      this.handleFilter()
     }
   }
+}
 </script>

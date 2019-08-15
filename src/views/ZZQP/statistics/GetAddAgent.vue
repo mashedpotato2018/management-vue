@@ -8,15 +8,15 @@
 </template>
 
 <script>
-  import { GetAddAgent } from '@/api/Zzqp/statistics'
-  import dataLine from '@/components/Line'
-  export default {
-    name:'GetAddAgent',
-    components:{dataLine},
-    methods:{
-      GetAddAgent
-    }
+import { GetAddAgent } from '@/api/Zzqp/statistics'
+import dataLine from '@/components/Line'
+export default {
+  name: 'GetAddAgent',
+  components: { dataLine },
+  methods: {
+    GetAddAgent
   }
+}
 </script>
 
 <style scoped>

@@ -52,7 +52,7 @@
               label="充值时间"
             >
               <template slot-scope="scope">
-                {{ scope.row.RechargeTime|DateFormat|parseTime}}
+                {{ scope.row.RechargeTime|DateFormat|parseTime }}
               </template>
             </el-table-column>
           </el-table>

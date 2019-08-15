@@ -7,15 +7,15 @@
 </template>
 
 <script>
-  import { GetAlliancePureProfit } from '@/api/Zzqp/statistics'
-  import dataLine from '@/components/Line'
-  export default {
-    name:'Alliance',
-    components:{dataLine},
-    methods:{
-      GetAlliancePureProfit
-    }
+import { GetAlliancePureProfit } from '@/api/Zzqp/statistics'
+import dataLine from '@/components/Line'
+export default {
+  name: 'Alliance',
+  components: { dataLine },
+  methods: {
+    GetAlliancePureProfit
   }
+}
 </script>
 
 <style scoped>

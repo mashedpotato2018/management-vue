@@ -71,7 +71,7 @@
               sortable="custom"
             >
               <template slot-scope="scope">
-                {{scope.row.TotalWinLose/100|toThousandFilter}}
+                {{ scope.row.TotalWinLose/100|toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>

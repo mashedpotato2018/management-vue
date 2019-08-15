@@ -8,7 +8,7 @@ export function GetRegister(data) {
   })
 }
 
-//每日登录
+// 每日登录
 export function GetLogon(data) {
   return request({
     url: '/Statistics/GetLogon',
@@ -17,7 +17,7 @@ export function GetLogon(data) {
   })
 }
 
-//每日房间对局
+// 每日房间对局
 export function GetRoom(data) {
   return request({
     url: '/Statistics/GetRoom',
@@ -26,7 +26,7 @@ export function GetRoom(data) {
   })
 }
 
-//每日房卡消耗
+// 每日房卡消耗
 export function GetCard(data) {
   return request({
     url: '/Statistics/GetCard',
@@ -44,7 +44,7 @@ export function GetAlliancePureProfit(data) {
   })
 }
 
-//每日代理收益
+// 每日代理收益
 export function GetAgentProfit(data) {
   return request({
     url: '/Statistics/GetAgentProfit',
@@ -53,7 +53,7 @@ export function GetAgentProfit(data) {
   })
 }
 
-//每日代理推荐人收益
+// 每日代理推荐人收益
 export function GetAgentRefereeProfit(data) {
   return request({
     url: '/Statistics/GetAgentRefereeProfit',
@@ -62,7 +62,7 @@ export function GetAgentRefereeProfit(data) {
   })
 }
 
-//每日新增代理
+// 每日新增代理
 export function GetAddAgent(data) {
   return request({
     url: '/Statistics/GetAddAgent',
@@ -71,7 +71,7 @@ export function GetAddAgent(data) {
   })
 }
 
-//每日充值
+// 每日充值
 export function GetRecharge(data) {
   return request({
     url: '/Statistics/GetRecharge',
@@ -84,6 +84,15 @@ export function GetRecharge(data) {
 export function AllScore(data) {
   return request({
     url: '/Statistics/AllScore',
+    method: 'get',
+    params: data
+  })
+}
+
+// 是实在线
+export function OnLineWater(data) {
+  return request({
+    url: '/Statistics/OnLineWater',
     method: 'get',
     params: data
   })

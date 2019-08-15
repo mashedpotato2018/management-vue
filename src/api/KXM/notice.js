@@ -26,3 +26,12 @@ export function HorseLamp(data) {
     data
   })
 }
+
+// 获取所有走马灯
+export function GetHorseLamp(data) {
+  return request({
+    url: '/Record/GetHorseLamp',
+    method: 'get',
+    params: data
+  })
+}

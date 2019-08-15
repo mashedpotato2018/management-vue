@@ -69,3 +69,22 @@ export function PlayersCrunchies(data) {
     params: data
   })
 }
+
+// 手数榜
+export function transaction(data) {
+  return request({
+    url: '/player/transaction',
+    method: 'get',
+    params: data
+  })
+}
+
+// 红利榜
+export function Dividend(data) {
+  return request({
+    url: '/player/Dividend',
+    method: 'get',
+    params: data
+  })
+}
+

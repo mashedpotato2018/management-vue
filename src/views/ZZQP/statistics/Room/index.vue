@@ -45,67 +45,67 @@
 </template>
 
 <script>
-  import waves from '@/directive/waves' // waves directive
-  import { parseTime } from '@/utils'
-  import Chart from './components/Chart'
-  import { GetRoom } from '@/api/Zzqp/statistics'
-  export default {
-    name: 'dataLine',
-    components: { Chart },
-    directives: { waves },
-    data() {
-      return {
-        date:'date',
-        list: [],
-        listLoading: true,
-        listQuery: {
-          bTime: parseTime(new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7)),
-          eTime: new Date()
-        },
-        downloadLoading: false,
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() > Date.now()
-          },
-          shortcuts: [{
-            text: '今天',
-            onClick(picker) {
-              picker.$emit('pick', new Date())
-            }
-          }, {
-            text: '昨天',
-            onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24)
-              picker.$emit('pick', date)
-            }
-          }, {
-            text: '一周前',
-            onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', date)
-            }
-          }]
-        }
-      }
-    },
-    created() {
-      this.getList()
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        this.listLoading = false
-        GetRoom(this.listQuery)
-          .then(response => {
-            this.list = response.data.items
-            this.listLoading = false
-          })
+import waves from '@/directive/waves' // waves directive
+import { parseTime } from '@/utils'
+import Chart from './components/Chart'
+import { GetRoom } from '@/api/Zzqp/statistics'
+export default {
+  name: 'DataLine',
+  components: { Chart },
+  directives: { waves },
+  data() {
+    return {
+      date: 'date',
+      list: [],
+      listLoading: true,
+      listQuery: {
+        bTime: parseTime(new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7)),
+        eTime: new Date()
       },
-      handleFilter() {
-        this.getList()
+      downloadLoading: false,
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
       }
     }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      this.listLoading = false
+      GetRoom(this.listQuery)
+        .then(response => {
+          this.list = response.data.items
+          this.listLoading = false
+        })
+    },
+    handleFilter() {
+      this.getList()
+    }
   }
+}
 </script>

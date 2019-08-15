@@ -7,18 +7,18 @@
 </template>
 
 <script>
-  import { HallWater } from '@/api/KXM/player'
-  import dataLine from '@/components/Line'
-  export default {
-    name:'HallWater',
-    data() {
-      return {}
-    },
-    components:{
-      dataLine
-    },
-    methods:{
-      HallWater
-    }
+import { HallWater } from '@/api/KXM/player'
+import dataLine from '@/components/Line'
+export default {
+  name: 'HallWater',
+  components: {
+    dataLine
+  },
+  data() {
+    return {}
+  },
+  methods: {
+    HallWater
   }
+}
 </script>

@@ -2,6 +2,10 @@
  * Created by PanJiaChen on 16/11/18.
  */
 
+export function DateFormat(str) {
+  return str.match(/[0-9]+/g).toString()
+}
+
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time

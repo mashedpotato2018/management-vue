@@ -40,8 +40,8 @@
               label="赠送人昵称"
             />
             <!--<el-table-column-->
-              <!--prop="Type"-->
-              <!--label="类型"-->
+            <!--prop="Type"-->
+            <!--label="类型"-->
             <!--/>-->
             <el-table-column
               prop="ByGivingID"

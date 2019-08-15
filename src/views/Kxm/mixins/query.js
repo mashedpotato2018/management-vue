@@ -6,14 +6,14 @@ export default {
   directives: { waves },
   filters: {
     DateFormat(str) {
-      return parseInt(str.substr(6, 13))
+      return str.match(/[0-9]+/g).toString()
     }
   },
   data() {
     return {
       list: [],
-      basic:[],
-      isShow:false,
+      basic: [],
+      isShow: false,
       total: 0,
       listLoading: true,
       listQuery: {
@@ -57,9 +57,9 @@ export default {
       this.getList()
     }
   },
-  watch:{
-    basic(newVal){
-      this.isShow = newVal.length>0
+  watch: {
+    basic(newVal) {
+      this.isShow = newVal.length > 0
     }
   }
 }

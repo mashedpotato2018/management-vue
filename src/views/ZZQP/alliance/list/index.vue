@@ -33,13 +33,13 @@
               label="昵称"
             />
             <!--<el-table-column-->
-              <!--prop="HeadImg"-->
-              <!--label="头像"-->
-              <!--align="center"-->
+            <!--prop="HeadImg"-->
+            <!--label="头像"-->
+            <!--align="center"-->
             <!--&gt;-->
-              <!--<template slot-scope="scope">-->
-                <!--<img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">-->
-              <!--</template>-->
+            <!--<template slot-scope="scope">-->
+            <!--<img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">-->
+            <!--</template>-->
             <!--</el-table-column>-->
             <el-table-column
               prop="SubAllianceTotal"
@@ -86,52 +86,52 @@
 </template>
 
 <script>
-  import { fetchList } from '@/api/Zzqp/alliance'
-  import waves from '@/directive/waves' // waves directive
-  import { parseTime } from '@/utils'
-  import { toThousandFilter } from '@/filters'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { fetchList } from '@/api/Zzqp/alliance'
+import waves from '@/directive/waves' // waves directive
+import { parseTime } from '@/utils'
+import { toThousandFilter } from '@/filters'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-  export default {
-    name: 'ComplexTable',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
-    },
-    data() {
-      return {
-        list: [],
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          page: 1,
-          limit: 10,
-          keyword: ''
-        },
-        downloadLoading: false
-      }
-    },
-    created() {
-      this.getList()
-    },
-    methods: {
-      getList() {
-        this.listLoading = true
-        fetchList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        })
+export default {
+  name: 'ComplexTable',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    }
+  },
+  data() {
+    return {
+      list: [],
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        keyword: ''
       },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
+      downloadLoading: false
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      fetchList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
     }
   }
+}
 </script>
 <style scoped>
   .primary-link:hover{

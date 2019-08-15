@@ -7,7 +7,7 @@ export function fetchList(data) {
     params: data
   })
 }
-
+// 代理推荐人
 export function RefereeList(data) {
   return request({
     url: '/proxy/RefereeList',
@@ -56,3 +56,22 @@ export function deploy(data) {
     params: data
   })
 }
+
+// 房卡充值
+export function CardNumRecord(data) {
+  return request({
+    url: '/proxy/CardNumRecord',
+    method: 'get',
+    params: data
+  })
+}
+
+// 转换副盟主
+export function ChangeAlliance(data) {
+  return request({
+    url: '/proxy/ChangeAlliance',
+    method: 'post',
+    data
+  })
+}
+

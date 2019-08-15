@@ -48,12 +48,12 @@
               prop="ServerName"
               label="所在房间"
               :filters="[
-              { text: '血战', value: 1 },
-              { text: '金花', value: 2 },
-              { text: '牛牛', value: 3 },
-              { text: '大唐麻将2人房', value: 4 },
-              { text: '大唐麻将3人房', value: 5 },
-              { text: '大唐麻将4人房', value: 6 }
+                { text: '血战', value: 1 },
+                { text: '金花', value: 2 },
+                { text: '牛牛', value: 3 },
+                { text: '大唐麻将2人房', value: 4 },
+                { text: '大唐麻将3人房', value: 5 },
+                { text: '大唐麻将4人房', value: 6 }
               ]"
             />
             <el-table-column
@@ -152,10 +152,10 @@
         label-position="left"
       >
         <el-form-item label="银珍珠" prop="Score">
-          <el-input v-model="temp.Score"></el-input>
+          <el-input v-model="temp.Score" />
         </el-form-item>
         <el-form-item label="房  卡" prop="CardPoint">
-          <el-input v-model="temp.CardPoint"></el-input>
+          <el-input v-model="temp.CardPoint" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -171,175 +171,177 @@
 </template>
 
 <script>
-  import { UserList, update, banned, SetMengZhu,SetFuMengZhu } from '@/api/Zzqp/player'
-  import waves from '@/directive/waves' // waves directive
-  import {toThousandFilter} from '@/filters'
-  import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { UserList, update, banned, SetMengZhu, SetFuMengZhu } from '@/api/Zzqp/player'
+import waves from '@/directive/waves' // waves directive
+import { toThousandFilter } from '@/filters'
+import { parseTime } from '@/utils'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-  export default {
-    name: 'ComplexTable',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      DateFormat(str) {
-        return parseInt(str.substr(6, 13))
-      }
-    },
-    data() {
-      const valiNumber = (rule, value, callback) => {
-        setTimeout(() => {
-          if (!/^-*[0-9]+$/.test(value)) {
-            callback(new Error('请输入数字值'))
-          } else {
-            callback()
-          }
-        }, 1000)
-      }
-      return {
-        list: [],
-        total: 0,
-        listLoading: true,
-        listQuery: {
-          page: 1,
-          limit: 10,
-          keyword: '',
-          state: true,
-          Online: false,
-          KindID: [],
-          sort:'',
-          sortType: 0
-        },
-        dialogFormVisible: false,
-        rules: {
-          Score: [
-              { required: true, message: '银珍珠为必须项', trigger: 'blur' },
-              { validator: valiNumber, trigger: 'blur' }
-            ],
-          CardPoint: [
-              { required: true, message: '房卡为必须项', trigger: 'blur' },
-              { validator: valiNumber, trigger: 'blur' }
-            ]
-        },
-        temp: {},
-        loading: false
-      }
-    },
-    created() {
-      this.getList()
-    },
-    methods: {
-      sortChange(data) {
-        const { prop, order } = data
-        this.sortByID(prop, order)
-      },
-      sortByID(column, order) {
-        const type = { ascending: 0, descending: 1 }
-        this.listQuery.sort = column
-        this.listQuery.sortType = type[order]
-        this.handleFilter()
-      },
-      handleFilterChange(filters){
-        if(filters['el-table_1_column_1']&&filters['el-table_1_column_1'].length){
-          this.listQuery.Online=true
-        }else{
-          this.listQuery.Online=false
+export default {
+  name: 'ComplexTable',
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    DateFormat(str) {
+      return parseInt(str.substr(6, 13))
+    }
+  },
+  data() {
+    const valiNumber = (rule, value, callback) => {
+      setTimeout(() => {
+        if (!/^-*[0-9]+$/.test(value)) {
+          callback(new Error('请输入数字值'))
+        } else {
+          callback()
         }
-        filters['el-table_1_column_4']&&(this.listQuery.KindID = filters['el-table_1_column_4'].map(item=>item))
-        this.handleFilter()
+      }, 1000)
+    }
+    return {
+      list: [],
+      total: 0,
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        keyword: '',
+        state: true,
+        Online: false,
+        KindID: [],
+        sort: '',
+        sortType: 0
       },
-      handleSetFuMengZhu(UserID){
-        this.$prompt('请输入盟主', '设置副盟主', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /^\d+$/,
-          inputErrorMessage: '数字格式不正确'
-        }).then(({ value }) => {
-          SetFuMengZhu({mengZhuID:value,UserID}).then(res=>{
-            if(res.code===20000)
-              this.$notify({
-                title: '成功',
-                message: res.Message,
-                type: '成功',
-                duration: 2000
-              })
+      dialogFormVisible: false,
+      rules: {
+        Score: [
+          { required: true, message: '银珍珠为必须项', trigger: 'blur' },
+          { validator: valiNumber, trigger: 'blur' }
+        ],
+        CardPoint: [
+          { required: true, message: '房卡为必须项', trigger: 'blur' },
+          { validator: valiNumber, trigger: 'blur' }
+        ]
+      },
+      temp: {},
+      loading: false
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    sortChange(data) {
+      const { prop, order } = data
+      this.sortByID(prop, order)
+    },
+    sortByID(column, order) {
+      const type = { ascending: 0, descending: 1 }
+      this.listQuery.sort = column
+      this.listQuery.sortType = type[order]
+      this.handleFilter()
+    },
+    handleFilterChange(filters) {
+      if (filters['el-table_1_column_1'] && filters['el-table_1_column_1'].length) {
+        this.listQuery.Online = true
+      } else {
+        this.listQuery.Online = false
+      }
+      filters['el-table_1_column_4'] && (this.listQuery.KindID = filters['el-table_1_column_4'].map(item => item))
+      this.handleFilter()
+    },
+    handleSetFuMengZhu(UserID) {
+      this.$prompt('请输入盟主', '设置副盟主', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^\d+$/,
+        inputErrorMessage: '数字格式不正确'
+      }).then(({ value }) => {
+        SetFuMengZhu({ mengZhuID: value, UserID }).then(res => {
+          if (res.code === 20000) {
+            this.$notify({
+              title: '成功',
+              message: res.Message,
+              type: '成功',
+              duration: 2000
+            })
+          }
+          this.handleFilter()
+        })
+      })
+    },
+    handleSetMengZhu(UserID) {
+      SetMengZhu({ UserID }).then(res => {
+        if (res.code === 20000) {
+          this.$notify({
+            title: '成功',
+            message: res.Message,
+            type: '成功',
+            duration: 2000
+          })
+        }
+        this.handleFilter()
+      })
+    },
+    handleBanned(index, row) {
+      banned({ UserID: row.UserID, state: 1 }).then(res => {
+        if (res.code === 20000) {
+          this.$notify({
+            title: '成功',
+            message: res.Message,
+            type: '成功',
+            duration: 2000
+          })
+        }
+        this.handleFilter()
+      })
+    },
+    handleUpdate(index, row) {
+      this.temp = Object.assign({}, row)
+      this.temp.CardPoint = 0
+      this.temp.Score = 0
+
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.loading = true
+          const tempData = Object.assign({}, this.temp)
+          tempData.CardPoint = tempData.CardPoint * 100
+          tempData.Score = tempData.Score * 100
+          update(tempData).then((res) => {
+            this.loading = false
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: res.Message,
+              type: '成功',
+              duration: 2000
+            })
             this.handleFilter()
           })
-        })
-
-      },
-      handleSetMengZhu(UserID){
-        SetMengZhu({UserID}).then(res=>{
-          if(res.code===20000)
-            this.$notify({
-              title: '成功',
-              message: res.Message,
-              type: '成功',
-              duration: 2000
-            })
-          this.handleFilter()
-        })
-      },
-      handleBanned(index, row){
-        banned({UserID: row.UserID, state: 1}).then(res=>{
-          if(res.code===20000)
-            this.$notify({
-              title: '成功',
-              message: res.Message,
-              type: '成功',
-              duration: 2000
-            })
-          this.handleFilter()
-        })
-      },
-      handleUpdate(index, row) {
-        this.temp = Object.assign({}, row)
-        this.temp.CardPoint = 0
-        this.temp.Score = 0
-
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      updateData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.loading = true
-            const tempData = Object.assign({}, this.temp)
-            tempData.CardPoint = tempData.CardPoint*100
-            tempData.Score = tempData.Score*100
-            update(tempData).then((res) => {
-              this.loading = false
-              this.dialogFormVisible = false
-              this.$notify({
-                title: '成功',
-                message: res.Message,
-                type: '成功',
-                duration: 2000
-              })
-              this.handleFilter()
-            })
             .catch(() => {
               this.loading = false
             })
-          }
-        })
-      },
-      getList() {
-        this.listLoading = true
-        UserList(this.listQuery).then(response => {
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        })
-      },
-      handleFilter() {
-        this.listQuery.page = 1
-        this.getList()
-      }
+        }
+      })
+    },
+    getList() {
+      this.listLoading = true
+      UserList(this.listQuery).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
     }
   }
+}
 </script>
 <style scoped>
   >>>.el-dialog{
