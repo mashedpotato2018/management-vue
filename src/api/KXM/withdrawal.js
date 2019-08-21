@@ -26,3 +26,21 @@ export function RecordList(data) {
     params: data
   })
 }
+
+// 获取奖池
+export function JackpotList(data) {
+  return request({
+    url: '/withdrawal/JackpotList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 奖池设置
+export function SetJackpot(data) {
+  return request({
+    url: '/withdrawal/SetJackpot',
+    method: 'post',
+    data
+  })
+}

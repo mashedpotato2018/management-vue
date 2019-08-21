@@ -35,3 +35,21 @@ export function AddLamp(data) {
     data
   })
 }
+
+// 奖池列表
+export function JackpotList(data) {
+  return request({
+    url: '/Notice/JackpotList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 设置奖池
+export function SetJackpot(data) {
+  return request({
+    url: '/Notice/SetJackpot',
+    method: 'post',
+    data
+  })
+}

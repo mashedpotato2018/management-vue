@@ -67,6 +67,26 @@ const viewRouters = [
     ]
   },
   {
+    path: '/Jackpot',
+    component: Layout,
+    meta: { title: '奖池',icon: 'Jackpot' },
+    children: [
+      {
+        path: '/list',
+        component: () => import('@/views/JunJun/Jackpot/List/'),
+        name: 'Jackpot-list',
+        meta: { title: '奖池列表' }
+      },
+      {
+        path: '/Set',
+        component: () => import('@/views/JunJun/Jackpot/Set/'),
+        name: 'Jackpot-Set',
+        meta: { title: '设置奖池' },
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/account',
     component: Layout,
     meta: { title: '用户管理', icon: 'bug' },

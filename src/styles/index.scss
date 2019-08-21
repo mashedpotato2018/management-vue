@@ -39,7 +39,10 @@ html {
 .padding-content {
   padding: 4px 0;
 }
-
+ul{
+  list-style: none;
+  padding: 0;
+}
 a:focus,
 a:active {
   outline: none;

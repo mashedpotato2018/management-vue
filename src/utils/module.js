@@ -25,12 +25,13 @@ const Zz = {
 const JunJun = {
   // 君君娱乐
   junjun: '152.136.160.73',
+  // 君越
   junyue: '139.155.17.199'
 }
 
 // 端口号
-// const prot = 53803
-const prot = 6061
+const prot = 53803
+// const prot = 6061
 
 const module = {
   KXM: {
@@ -79,8 +80,8 @@ function makePro(url) {
 }
 
 // 项目
-const project = makePro(KXM.kx).kxm.base
-// const project = makePro(JunJun.junyue).junjun.Company
+// const project = makePro(KXM.test).kxm.base
+const project = makePro(JunJun.junyue).junjun.Company
 
 // 项目模块配置
 export const title = project.title
