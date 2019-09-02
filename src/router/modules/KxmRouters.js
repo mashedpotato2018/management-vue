@@ -27,8 +27,62 @@ const viewRouters = [
     ]
   },
   {
+    path: '/champions',
+    component: Layout,
+    meta: { title: '盟主', icon: 'Champions', affix: false },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/Kxm/Champions/list/'),
+        name: 'champions',
+        meta: { title: '盟主列表', affix: false }
+      },
+      {
+        path: 'changePassword',
+        component: () => import('@/views/Kxm/Champions/changePassword/'),
+        name: 'changePassword',
+        meta: { title: '更改密码', affix: false },
+        hidden: true
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/Kxm/Champions/add/'),
+        name: 'add-Champions',
+        meta: { title: '注册盟主', affix: false },
+        hidden: true
+      },
+    ]
+  },
+  {
+    path: '/Partner',
+    component: Layout,
+    meta: { title: '合伙人', icon: 'Partner', affix: false },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/Kxm/Partner/list/'),
+        name: 'Partner',
+        meta: { title: '合伙人列表', affix: false }
+      },
+      {
+        path: 'ContributeList',
+        component: () => import('@/views/Kxm/Partner/Contribute/'),
+        name: 'ContributeList',
+        meta: { title: '合伙人每周贡献', affix: false }
+      },
+      {
+        path: 'ContributeDetail',
+        component: () => import('@/views/Kxm/Partner/ContributeDetail/'),
+        name: 'ContributeDetail',
+        meta: { title: '每周贡献详情', affix: false },
+        hidden: true
+      },
+    ]
+  },
+  {
     path: '/combat',
     component: Layout,
+    meta:{ roles:['admin'] },
     children: [
       {
         path: 'Query',
@@ -41,6 +95,7 @@ const viewRouters = [
   {
     path: '/change',
     component: Layout,
+    meta:{ roles:['admin'] },
     children: [
       {
         path: 'Query',
@@ -53,7 +108,7 @@ const viewRouters = [
   {
     path: '/Jackpot',
     component: Layout,
-    meta: { title: '奖池', icon: 'Jackpot', affix: false },
+    meta: { roles:['admin'], title: '奖池', icon: 'Jackpot', affix: false },
     children: [
       {
         path: 'list',
@@ -73,7 +128,7 @@ const viewRouters = [
   {
     path: '/Line',
     component: Layout,
-    meta: { title: '图表统计', icon: 'chart', affix: false },
+    meta: { roles:['admin'], title: '图表统计', icon: 'chart', affix: false },
     children: [
       {
         path: 'EarningsChart',
@@ -104,6 +159,7 @@ const viewRouters = [
   {
     path: '/GivingRecords',
     component: Layout,
+    meta:{ roles:['admin'] },
     children: [
       {
         path: 'list',
@@ -116,7 +172,7 @@ const viewRouters = [
   {
     path: '/PlayersCrunchies',
     component: Layout,
-    meta: { title: '榜单', icon: 'nested', affix: false },
+    meta: { roles:['admin'], title: '榜单', icon: 'nested', affix: false },
     children: [
       {
         path: 'list',
@@ -141,6 +197,7 @@ const viewRouters = [
   {
     path: '/recharge',
     component: Layout,
+    meta:{roles:['admin']},
     children: [
       {
         path: 'list',
@@ -153,6 +210,7 @@ const viewRouters = [
   {
     path: '/WithdrawalPending',
     component: Layout,
+    meta:{roles:['admin']},
     children: [
       {
         path: 'Pending',
@@ -163,6 +221,7 @@ const viewRouters = [
     ]
   },
   {
+    meta:{roles:['admin']},
     path: '/WithdrawalRecord',
     component: Layout,
     children: [
@@ -175,6 +234,7 @@ const viewRouters = [
     ]
   },
   {
+    meta:{roles:['admin']},
     path: '/notice',
     component: Layout,
     children: [
@@ -189,6 +249,7 @@ const viewRouters = [
   {
     path: '/horse',
     component: Layout,
+    meta:{roles:['admin']},
     children: [
       {
         path: 'list',
@@ -208,6 +269,7 @@ const viewRouters = [
   {
     path: '/setProxy',
     component: Layout,
+    meta:{ roles:['admin'] },
     children: [
       {
         path: 'set',
@@ -220,6 +282,7 @@ const viewRouters = [
   {
     path: '/backList',
     component: Layout,
+    meta:{ roles:['admin'] },
     children: [
       {
         path: 'list',

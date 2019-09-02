@@ -26,3 +26,12 @@ export function ChangePwd(data) {
     data
   })
 }
+
+// 添加盟主
+export function addChampions(data) {
+  return request({
+    url: '/Champions/addChampions',
+    method: 'post',
+    data
+  })
+}

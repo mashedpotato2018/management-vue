@@ -26,12 +26,15 @@
             扎金花同花顺派将百分比: <span class="rate">{{item.CJ_THS}}%</span>
           </li>
           <li>
+            系统抽水: <span class="line">{{item.SysTax}}</span>%
+          </li>
+          <li v-if="bottom.includes(item.ServerID)">
             初级场: <span class="line">{{item.AwardTaxNum1|num}}</span>(<span class="count">{{item.AwardTaxNum1_1|num}}</span>)
           </li>
-          <li>
+          <li v-if="middle.includes(item.ServerID)">
             中级场: <span class="line">{{item.AwardTaxNum2|num}}</span>(<span class="count">{{item.AwardTaxNum2_1|num}}</span>)
           </li>
-          <li>
+          <li v-if="top.includes(item.ServerID)">
             高级场: <span class="line">{{item.AwardTaxNum3|num}}</span>(<span class="count">{{item.AwardTaxNum3_1|num}}</span>)
           </li>
         </ul>
@@ -44,9 +47,6 @@
   import {JackpotList} from '@/api/Zzqp/notice/'
   export default {
     filters:{
-      jinhuaRoom(serverid){
-        return this.jinhua.include(serverid)
-      },
       num(value){
         return value/100
       }
@@ -58,6 +58,9 @@
       return {
         jinhua:[12,13,14],
         niuniu:[43,44,45],
+        bottom:[2,5,9,12,16,19,23,26,30,33,37,40,43],
+        middle:[3,6,10,13,17,20,24,27,31,34,38,41,44],
+        top:[4,7,11,14,18,21,25,28,32,35,39,42,45],
         list:[]
       }
     },

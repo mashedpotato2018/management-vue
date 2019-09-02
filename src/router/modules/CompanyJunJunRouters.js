@@ -47,7 +47,7 @@ const viewRouters = [
   {
     path: '/proxy',
     component: Layout,
-    meta: { title: '代理列表', icon: 'tree' },
+    meta: { title: '代理', icon: 'tree' },
     name: 'proxy',
     redirect: '/proxy/list',
     children: [
@@ -63,22 +63,42 @@ const viewRouters = [
         name: 'player-list-detail',
         meta: { title: '玩家详情' },
         hidden: true
-      }
+      },
+      {
+        path: '/proxy/AgentRefereeList',
+        component: () => import('@/views/JunJun/proxy/RefereeList/'),
+        name: 'proxy-AgentRefereeList',
+        meta: { title: '代理推荐人列表' }
+      },
+      {
+        path: '/proxy/cardPoint',
+        component: () => import('@/views/JunJun/proxy/CardPoint/'),
+        name: 'proxy-cardPoint',
+        meta: { title: '房卡消耗' },
+        hidden: true
+      },
     ]
   },
   {
     path: '/Jackpot',
     component: Layout,
     meta: { title: '奖池',icon: 'Jackpot' },
+    redirect:'/Jackpot/list',
     children: [
       {
-        path: '/list',
+        path: 'list',
         component: () => import('@/views/JunJun/Jackpot/List/'),
         name: 'Jackpot-list',
         meta: { title: '奖池列表' }
       },
       {
-        path: '/Set',
+        path: 'record',
+        component: () => import('@/views/JunJun/Jackpot/record/'),
+        name: 'Jackpot-record',
+        meta: { title: '设置记录' }
+      },
+      {
+        path: 'Set',
         component: () => import('@/views/JunJun/Jackpot/Set/'),
         name: 'Jackpot-Set',
         meta: { title: '设置奖池' },

@@ -114,7 +114,9 @@ export default {
         limit: 10,
         id: '',
         NickName: '',
-        parentId: 0
+        parentId: 0,
+        roles: '',
+        username:''
       },
       downloadLoading: false
     }
@@ -125,6 +127,8 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      this.listQuery.username = this.$store.state.user.username
+      this.listQuery.roles = this.$store.state.user.roles[0]
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -137,7 +141,7 @@ export default {
     },
     load(tree, treeNode, resolve) {
       const parentId = treeNode.rowKey
-      var treeQuery = { parentId }
+      var treeQuery = { parentId ,username: this.$store.state.user.username,roles:this.$store.state.user.roles[0]}
       fetchList(treeQuery).then(response => {
         resolve(response.data.items)
       })

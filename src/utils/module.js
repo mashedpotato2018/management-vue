@@ -15,27 +15,36 @@ const local = 'localhost'
 const KXM = {
   // 凯旋门
   kx: '39.98.188.43',
-  test: '39.100.153.211'
+  test: '39.100.153.211',
+  // 旋王争霸
+  xwzb: '149.234.157.71',
+  //掌上旋
+  zsx: '119.27.160.138'
 }
 const Zz = {
   // 至尊棋牌
   zzqp: '140.143.162.86',
-  newzzqp: '103.37.234.58'
+  newzzqp: '103.37.234.58',
+  jinsha: '103.37.234.49'
 }
 const JunJun = {
   // 君君娱乐
   junjun: '152.136.160.73',
   // 君越
-  junyue: '139.155.17.199'
+  junyue: '45.40.199.237',
+  // 星辰
+  xingchen: '49.234.176.192',
+  // 同城娱乐
+  tongcheng:'139.9.149.224'
 }
 
 // 端口号
-const prot = 53803
+// const prot = 53803
 // const prot = 6061
 
 const module = {
   KXM: {
-    joinPro: (baseUrl, routers, title = '管理后台') => {
+    joinPro: (baseUrl, routers, title = '管理后台', prot) => {
       return {
         title,
         baseUrl: `http://${baseUrl}:${prot}/KXM`,
@@ -44,7 +53,7 @@ const module = {
     }
   },
   Zzqp: {
-    joinPro: (baseUrl, routers, title = '管理后台') => {
+    joinPro: (baseUrl, routers, title = '管理后台', prot) => {
       return {
         title,
         baseUrl: `http://${baseUrl}:${prot}/ZZQP`,
@@ -53,7 +62,7 @@ const module = {
     }
   },
   JunJun: {
-    joinPro: (baseUrl, routers, title = '管理后台') => {
+    joinPro: (baseUrl, routers, title = '管理后台', prot) => {
       return {
         title,
         baseUrl: `http://${baseUrl}:${prot}/JunJun`,
@@ -63,25 +72,34 @@ const module = {
   }
 }
 // 生成项目
-function makePro(url) {
+function makePro(url,title='管理后台') {
   return {
     junjun: {
-      base: module.JunJun.joinPro(url, JunJunRouters),
-      Company: module.JunJun.joinPro(url, CompanyJunJunRouters)
+      base: module.JunJun.joinPro(url, JunJunRouters,title,53803),
+      Company: module.JunJun.joinPro(url, CompanyJunJunRouters,title,53803)
     },
     zzqp: {
-      base: module.Zzqp.joinPro(url, ZzqpRouters),
-      Company: module.Zzqp.joinPro(url, CompanyZzqpRouters)
+      base: module.Zzqp.joinPro(url, ZzqpRouters,title,53803),
+      Company: module.Zzqp.joinPro(url, CompanyZzqpRouters,title,53803)
     },
     kxm: {
-      base: module.KXM.joinPro(url, KxmRouters)
+      base: module.KXM.joinPro(url, KxmRouters,title,6061)
     }
   }
 }
 
 // 项目
-// const project = makePro(KXM.test).kxm.base
-const project = makePro(JunJun.junyue).junjun.Company
+// const project = makePro(local,'本地').kxm.base
+// const project = makePro(KXM.test,'测试').kxm.base
+// const project = makePro(KXM.kx,'天地旋').kxm.base
+// const project = makePro(KXM.zsx,'掌上旋').kxm.base
+
+const project = makePro(Zz.jinsha,'金沙娱乐').junjun.Company
+
+// const project = makePro(JunJun.xingchen,'星辰').junjun.Company
+// const project = makePro(JunJun.junyue,'联盟娱乐').junjun.Company
+// const project = makePro(JunJun.tongcheng,'同城娱乐').junjun.Company
+
 
 // 项目模块配置
 export const title = project.title

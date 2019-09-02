@@ -45,6 +45,15 @@ export function JackpotList(data) {
   })
 }
 
+// 奖池记录
+export function JackpotRecord(data) {
+  return request({
+    url: '/Notice/JackpotRecord',
+    method: 'get',
+    params: data
+  })
+}
+
 // 设置奖池
 export function SetJackpot(data) {
   return request({

@@ -21,22 +21,25 @@
           <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花同花顺派将百分比">
             <el-input-number v-model="formPost.CJ_THS" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
-          <el-form-item label="初级场抽水起始线">
+          <el-form-item label="系统抽水百分比">
+            <el-input-number v-model="formPost.SysTax" controls-position="right" :min="0" :max="100"></el-input-number>
+          </el-form-item>
+          <el-form-item v-if="bottom.includes(formPost.ServerID)" label="初级场抽水起始线">
             <el-input-number v-model="formPost.AwardTaxNum1" controls-position="right" :min="1"></el-input-number>
           </el-form-item>
-          <el-form-item label="初级抽水数量">
+          <el-form-item v-if="bottom.includes(formPost.ServerID)" label="初级抽水数量">
             <el-input-number v-model="formPost.AwardTaxNum1_1" controls-position="right" :min="0"></el-input-number>
           </el-form-item>
-          <el-form-item label="中级场抽水起始线">
+          <el-form-item v-if="middle.includes(formPost.ServerID)" label="中级场抽水起始线">
             <el-input-number v-model="formPost.AwardTaxNum2" controls-position="right" :min="1"></el-input-number>
           </el-form-item>
-          <el-form-item label="中级抽水数量">
+          <el-form-item v-if="middle.includes(formPost.ServerID)" label="中级抽水数量">
             <el-input-number v-model="formPost.AwardTaxNum2_1" controls-position="right" :min="0"></el-input-number>
           </el-form-item>
-          <el-form-item label="高级场抽水起始线">
+          <el-form-item v-if="top.includes(formPost.ServerID)" label="高级场抽水起始线">
             <el-input-number v-model="formPost.AwardTaxNum3" controls-position="right" :min="1"></el-input-number>
           </el-form-item>
-          <el-form-item label="高级抽水数量">
+          <el-form-item v-if="top.includes(formPost.ServerID)" label="高级抽水数量">
             <el-input-number v-model="formPost.AwardTaxNum3_1" controls-position="right" :min="0"></el-input-number>
           </el-form-item>
           <el-form-item>
@@ -60,6 +63,9 @@
       return {
         jinhua:[12,13,14],
         niuniu:[43,44,45],
+        bottom:[2,5,9,12,16,19,23,26,30,33,37,40,43],
+        middle:[3,6,10,13,17,20,24,27,31,34,38,41,44],
+        top:[4,7,11,14,18,21,25,28,32,35,39,42,45],
         formPost:{
           ServerID: 0,
           ZDNN_THS: 0,
@@ -74,6 +80,7 @@
           AwardTaxNum2_1: 0,
           AwardTaxNum3: 1,
           AwardTaxNum3_1: 0,
+          SysTax:0
         },
         loading:false
       }

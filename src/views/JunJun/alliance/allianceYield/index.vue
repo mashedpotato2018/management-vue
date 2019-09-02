@@ -25,10 +25,6 @@
           >
             <el-table-column
               fixed
-              prop="AgentID"
-              label="代理id"
-            />
-            <el-table-column
               prop="UserId"
               label="用户ID"
             />
@@ -59,6 +55,25 @@
             >
               <template slot-scope="scope">
                 {{ scope.row.AgentRefereeProfit/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="CardPointReduce"
+              label="房卡消耗总数"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.CardPointReduce/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="AgentCount"
+              label="所属代理总数"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <router-link class="primary-link" :to="{name:'alliance-proxy-yield',params:scope.row}" tag="a">
+                  {{ scope.row.AgentCount|toThousandFilter }}
+                </router-link>
               </template>
             </el-table-column>
           </el-table>
@@ -128,3 +143,24 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped >
+  .primary-link:hover{
+    color: #66b1ff;
+    text-decoration: underline;
+  }
+  .primary-link {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    position: relative;
+    color: #409eff;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+</style>

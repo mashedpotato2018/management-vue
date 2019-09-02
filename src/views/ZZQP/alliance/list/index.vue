@@ -56,9 +56,10 @@
               label="下级代理总数"
             >
               <template slot-scope="scope">
-                <router-link class="primary-link" :to="{name:'alliance-proxy-yield',params:scope.row}" tag="a">
-                  {{ scope.row.SubProxyTotal|toThousandFilter }}
-                </router-link>
+                <!--<router-link class="primary-link" :to="{name:'alliance-proxy-yield',params:scope.row}" tag="a">-->
+                  <!--{{ scope.row.SubProxyTotal|toThousandFilter }}-->
+                <!--</router-link>-->
+                {{ scope.row.SubProxyTotal|toThousandFilter }}
               </template>
             </el-table-column>
             <el-table-column
@@ -66,9 +67,10 @@
               label="所属玩家总数"
             >
               <template slot-scope="scope">
-                <router-link class="primary-link" :to="{name:'alliance-player-yield',params:scope.row}" tag="a">
-                  {{ scope.row.SubPlayerTotal|toThousandFilter }}
-                </router-link>
+                {{ scope.row.SubPlayerTotal|toThousandFilter }}
+                <!--<router-link class="primary-link" :to="{name:'alliance-player-yield',params:scope.row}" tag="a">-->
+                  <!--{{ scope.row.SubPlayerTotal|toThousandFilter }}-->
+                <!--</router-link>-->
               </template>
             </el-table-column>
           </el-table>

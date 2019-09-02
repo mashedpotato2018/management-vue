@@ -38,7 +38,7 @@
             :list="list"
             :title="title"
             :unit="unit"
-            :todate="Todate"
+            :todate="todate"
             :handle="handle"
           />
         </div>
@@ -68,6 +68,10 @@ export default {
     query: {
       type: Function,
       default: null
+    },
+    params:{
+      type: Object,
+      default: {}
     },
     handle: {
       type: Number,
@@ -116,6 +120,7 @@ export default {
     }
   },
   created() {
+    Object.assign(this.listQuery,this.params)
     this.getList()
   },
   methods: {

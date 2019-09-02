@@ -75,3 +75,21 @@ export function ChangeAlliance(data) {
   })
 }
 
+// 推荐人列表
+export function AgentRefereeList(data) {
+  return request({
+    url: '/proxy/AgentRefereeList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 每日房卡消耗
+export function CardPoint(data) {
+  return request({
+    url: '/proxy/CardPoint',
+    method: 'get',
+    params: data
+  })
+}
+

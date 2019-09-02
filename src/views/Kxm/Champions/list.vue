@@ -5,32 +5,14 @@
         <div>
           <el-input
             v-model="listQuery.id"
-            placeholder="代理商账号"
+            placeholder="用户id"
             style="width: 200px;"
             class="filter-item"
             @keyup.enter.native="handleFilter"
           />
-          <el-input
-            v-model="listQuery.NickName"
-            placeholder="代理名称"
-            style="width: 200px;"
-            class="filter-item"
-            @keyup.enter.native="handleFilter"
-          />
-          <el-date-picker
-            v-model="listQuery.bTime"
-            type="datetime"
-            placeholder="开始时间"
-            style="transform: translateY(-4px)"
-            @keyup.enter.native="handleFilter"
-          />
-          <el-date-picker
-            v-model="listQuery.eTime"
-            type="datetime"
-            placeholder="结束时间"
-            style="transform: translateY(-4px)"
-            @keyup.enter.native="handleFilter"
-          />
+          <el-button v-waves class="filter-item" type="primary" @click="add">
+            注册
+          </el-button>
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -47,17 +29,27 @@
             <el-table-column
               fixed
               prop="UserID"
-              label="代理商账号"
+              label="用户id"
             >
               <template slot-scope="scope">
-                <router-link class="primary-link" :to="{name:'changePassword',params:scope.row}" tag="a">
-                  {{ scope.row.UserID }}
-                </router-link>
+                <router-link class="primary-link" tag="a" :to="{name:'changePassword',params:scope.row}">{{ scope.row.UserID }}</router-link>
               </template>
             </el-table-column>
             <el-table-column
-              prop="RealName"
-              label="代理商姓名"
+              prop="AllianceID"
+              label="盟主id"
+            />
+            <el-table-column
+              prop="HeadImg"
+              label="头像"
+            >
+              <template slot-scope="scope">
+                <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="NickName"
+              label="昵称"
             />
             <el-table-column
               prop="Gender"
@@ -68,16 +60,8 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="TelNo"
-              label="电话号码"
-            />
-            <el-table-column
-              prop="IDNumber"
-              label="身份证号码"
-            />
-            <el-table-column
               prop="CreateDate"
-              label="开户时间"
+              label="创建时间"
             >
               <template slot-scope="scope">
                 {{ scope.row.CreateDate | DateFormat|parseTime }}
@@ -127,9 +111,9 @@ export default {
         id: '',
         NickName: '',
         bTime: '',
-        eTime: ''
-        // bTime: new Date().getTime() - 3600 * 1000 * 24 * 7,
-        // eTime: new Date()
+        eTime: '',
+        roles: '',
+        username:''
       },
       downloadLoading: false
     }
@@ -140,11 +124,16 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      this.listQuery.username = this.$store.state.user.username
+      this.listQuery.roles = this.$store.state.user.roles[0]
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    add(){
+      this.$router.push('/champions/add')
     },
     handleFilter() {
       this.listQuery.page = 1

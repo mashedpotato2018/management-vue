@@ -84,6 +84,15 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="InsureScore"
+              sortable="InsureScore"
+              label="银行"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.InsureScore/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="LastLoginTime"
               label="最后登录时间"
               width="200"

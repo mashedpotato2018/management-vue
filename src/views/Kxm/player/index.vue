@@ -144,7 +144,9 @@ export default {
         id: '',
         NickName: '',
         sort: 'Score',
-        sortType: 1
+        sortType: 1,
+        roles: '',
+        username:''
       },
       downloadLoading: false
     }
@@ -155,6 +157,8 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      this.listQuery.username = this.$store.state.user.username
+      this.listQuery.roles = this.$store.state.user.roles[0]
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total

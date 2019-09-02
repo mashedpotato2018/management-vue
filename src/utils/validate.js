@@ -15,7 +15,7 @@ export function isExternal(path) {
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  return str.length >= 0 && str.length < 12
+  return str.length >= 0
 }
 
 /**

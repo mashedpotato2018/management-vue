@@ -65,6 +65,14 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="LeftGold"
+              label="剩余银行"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.LeftInsure/100 | toThousandFilter }}
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="AllianceDeployAdd"
               label="调配入"
             >

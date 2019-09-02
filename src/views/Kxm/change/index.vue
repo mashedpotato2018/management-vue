@@ -66,7 +66,7 @@
               label="剩余金币"
             >
               <template slot-scope="scope">
-                {{ scope.row.Money|toThousandFilter }}
+                {{ scope.row.Money/100|toThousandFilter }}
               </template>
             </el-table-column>
           </el-table>

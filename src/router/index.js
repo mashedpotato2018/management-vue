@@ -39,8 +39,7 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/base/error-page/401'),
     hidden: true
-  },
-  ...viewRouters
+  }
 ]
 
 /**
@@ -49,7 +48,8 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+  ...viewRouters
 ]
 
 const createRouter = () => new Router({
