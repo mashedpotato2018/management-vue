@@ -3,24 +3,51 @@
     <div class="filter-container">
       <el-card class="box-card" style="width: 500px;">
         <el-form label-width="200px" label-position="left">
-          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="牛牛同花顺派将百分比">
+          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="牛牛同花顺派奖百分比">
             <el-input-number v-model="formPost.ZDNN_THS" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
-          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="战斗牛牛炸弹牛派将百分比">
+          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="战斗牛牛炸弹牛派奖百分比">
             <el-input-number v-model="formPost.ZDNN_ZD" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
-          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="战斗牛牛五花牛派将百分比">
+          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="战斗牛牛五花牛派奖百分比">
             <el-input-number v-model="formPost.ZDNN_WH" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
-          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花AAA派将百分比">
+          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花AAA派奖百分比">
             <el-input-number v-model="formPost.CJAAA" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
-          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花豹子派将百分比">
+          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花豹子派奖百分比">
             <el-input-number v-model="formPost.CJ_BZ" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
-          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花同花顺派将百分比">
+          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花同花顺派奖百分比">
             <el-input-number v-model="formPost.CJ_THS" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
+
+          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="牛牛同花顺概率万分比">
+            <el-input-number v-model="formPost.ProZDNN_THS" controls-position="right" :min="0" :max="10000"></el-input-number>
+          </el-form-item>
+          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="牛牛炸弹牛概率万分比">
+            <el-input-number v-model="formPost.ProZDNN_ZD" controls-position="right" :min="0" :max="10000"></el-input-number>
+          </el-form-item>
+          <el-form-item v-if="niuniu.includes(formPost.ServerID)" label="牛牛五花牛概率万分比">
+            <el-input-number v-model="formPost.ProZDNN_WH" controls-position="right" :min="0" :max="10000"></el-input-number>
+          </el-form-item>
+          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花AAA概率万分比">
+            <el-input-number v-model="formPost.ProCJ_AAA" controls-position="right" :min="0" :max="10000"></el-input-number>
+          </el-form-item>
+          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花豹子概率万分比">
+            <el-input-number v-model="formPost.ProCJ_BZ" controls-position="right" :min="0" :max="10000"></el-input-number>
+          </el-form-item>
+          <el-form-item v-if="jinhua.includes(formPost.ServerID)" label="扎金花同花顺概率万分比">
+            <el-input-number v-model="formPost.ProCJ_THS" controls-position="right" :min="0" :max="10000"></el-input-number>
+          </el-form-item>
+          <el-form-item label="是否开启概率控制">
+            <el-switch
+              style="display: block;margin-top: 8px"
+              v-model="formPost.IsCardCobtrol"
+            >
+            </el-switch>
+          </el-form-item>
+
           <el-form-item label="系统抽水百分比">
             <el-input-number v-model="formPost.SysTax" controls-position="right" :min="0" :max="100"></el-input-number>
           </el-form-item>
@@ -42,6 +69,16 @@
           <el-form-item v-if="top.includes(formPost.ServerID)" label="高级抽水数量">
             <el-input-number v-model="formPost.AwardTaxNum3_1" controls-position="right" :min="0"></el-input-number>
           </el-form-item>
+          <el-form-item label="是否开启定位">
+            <el-switch
+              style="display: block;margin-top: 8px"
+              v-model="formPost.ServerOpenGPS"
+            >
+            </el-switch>
+          </el-form-item>
+          <el-form-item label="定位最小距离">
+            <el-input-number v-model="formPost.DistanceGPS" controls-position="right" :min="0"></el-input-number>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" :loading="loading" @click="onSubmit">立即设置</el-button>
           </el-form-item>
@@ -56,7 +93,10 @@
   export default {
     created(){
       (this.$route.params.ID===undefined)&&(this.$router.push({name:'Jackpot-list'}))
+
       Object.assign(this.formPost,this.$route.params)
+      this.formPost.ServerOpenGPS = !!this.formPost.ServerOpenGPS
+      this.formPost.IsCardCobtrol = !!this.formPost.IsCardCobtrol
       this.handlenum(this.formPost,this.getnum)
     },
     data() {
@@ -80,7 +120,17 @@
           AwardTaxNum2_1: 0,
           AwardTaxNum3: 1,
           AwardTaxNum3_1: 0,
-          SysTax:0
+          SysTax:0,
+          ServerOpenGPS: true,
+          DistanceGPS: 0,
+
+          ProZDNN_THS: 0,
+          ProZDNN_ZD: 0,
+          ProZDNN_WH: 0,
+          ProCJ_AAA: 0,
+          ProCJ_BZ: 0,
+          ProCJ_THS: 0,
+          IsCardCobtrol: true
         },
         loading:false
       }
@@ -93,6 +143,7 @@
         return value*100
       },
       handlenum(obj,callback){
+
         obj.AwardTaxNum1 = callback(obj.AwardTaxNum1)
         obj.AwardTaxNum1_1 = callback(obj.AwardTaxNum1_1)
 
@@ -131,6 +182,15 @@
         let post = {}
         Object.assign(post,this.formPost)
         this.handlenum(post,this.setnum)
+        if(post.ServerOpenGPS)
+          post.ServerOpenGPS = 1
+        else
+          post.ServerOpenGPS = 0
+
+        if(post.IsCardCobtrol)
+          post.IsCardCobtrol = 1
+        else
+          post.IsCardCobtrol = 0
         SetJackpot(post).then(res=>{
           if (res.code === 20000) {
             this.$notify({

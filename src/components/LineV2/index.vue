@@ -37,7 +37,7 @@
             width="100%"
             :list="list"
             :unit="unit"
-            :todate="Todate"
+            :Todate="Todate"
             :handle="handle"
           />
         </div>
@@ -68,9 +68,13 @@ export default {
       type: Number,
       default: 100
     },
-    todate: {
+    Todate: {
       type: String,
       default: '{y}-{m}-{d}'
+    },
+    parentId:{
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -79,6 +83,7 @@ export default {
       list: null,
       listLoading: true,
       listQuery: {
+        AllianceID: 0,
         bTime: parseTime(new Date().setTime(new Date().getTime() - 3600 * 1000 * 24 * 7)),
         eTime: new Date()
       },
@@ -116,6 +121,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      this.listQuery.AllianceID = this.parentId
       this.query(this.listQuery)
         .then(response => {
           this.list = response.data

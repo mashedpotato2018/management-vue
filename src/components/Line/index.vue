@@ -71,7 +71,9 @@ export default {
     },
     params:{
       type: Object,
-      default: {}
+      default: function() {
+        return {}
+      }
     },
     handle: {
       type: Number,
@@ -120,6 +122,8 @@ export default {
     }
   },
   created() {
+    if(this.date!=='{y}-{m}-{d}')
+      this.date = 'datetime'
     Object.assign(this.listQuery,this.params)
     this.getList()
   },

@@ -71,7 +71,7 @@
                   size="mini"
                   type="warning"
                   @click="handleEdit(scope.$index, scope.row)"
-                >解封</el-button>
+                >解除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -89,62 +89,62 @@
 </template>
 
 <script>
-import { UserList, banned } from '@/api/Zzqp/player'
-import waves from '@/directive/waves' // waves directive
-import { toThousandFilter } from '@/filters'
-import { parseTime,DateFormat } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+  import { WhiteList, closeWhite } from '@/api/Zzqp/player'
+  import waves from '@/directive/waves' // waves directive
+  import { toThousandFilter } from '@/filters'
+  import { parseTime,DateFormat } from '@/utils'
+  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-export default {
-  name: 'BlackList',
-  components: { Pagination },
-  directives: { waves },
-  filters: {
-    DateFormat
-  },
-  data() {
-    return {
-      list: [],
-      total: 0,
-      listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 10,
-        keyword: '',
-        state: false
-      },
-      downloadLoading: false
-    }
-  },
-  created() {
-    this.getList()
-  },
-  methods: {
-    getList() {
-      this.listLoading = true
-      UserList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
-      })
+  export default {
+    name: 'WhiteList',
+    components: { Pagination },
+    directives: { waves },
+    filters: {
+      DateFormat
     },
-    handleEdit(index, row) {
-      banned({ UserID: row.UserID, state: 0 }).then(res => {
-        if (res.code === 20000) {
-          this.$notify({
-            title: '成功',
-            message: '解封成功',
-            type: '成功',
-            duration: 2000
-          })
-        }
-        this.handleFilter()
-      })
+    data() {
+      return {
+        list: [],
+        total: 0,
+        listLoading: true,
+        listQuery: {
+          page: 1,
+          limit: 10,
+          keyword: '',
+          state: false
+        },
+        downloadLoading: false
+      }
     },
-    handleFilter() {
-      this.listQuery.page = 1
+    created() {
       this.getList()
+    },
+    methods: {
+      getList() {
+        this.listLoading = true
+        WhiteList(this.listQuery).then(response => {
+          this.list = response.data.items
+          this.total = response.data.total
+          this.listLoading = false
+        })
+      },
+      handleEdit(index, row) {
+        closeWhite({ UserID: row.UserID}).then(res => {
+          if (res.code === 20000) {
+            this.$notify({
+              title: '成功',
+              message: '解除成功',
+              type: '成功',
+              duration: 2000
+            })
+          }
+          this.handleFilter()
+        })
+      },
+      handleFilter() {
+        this.listQuery.page = 1
+        this.getList()
+      }
     }
   }
-}
 </script>

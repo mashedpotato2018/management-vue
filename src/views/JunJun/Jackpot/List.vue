@@ -8,22 +8,24 @@
             奖池金币: <span class="score">{{item.JackpotScore|num}}</span>
           </li>
           <li v-if="niuniu.includes(item.ServerID)">
-            牛牛同花顺派将百分比: <span class="rate">{{item.ZDNN_THS}}%</span>
+            牛牛同花顺--派奖(概率): <span class="rate">{{item.ZDNN_THS}}%</span>(<span class="count">{{item.ProZDNN_THS}}‱</span>)
           </li>
           <li v-if="niuniu.includes(item.ServerID)">
-            战斗牛牛炸弹牛派将百分比: <span class="rate">{{item.ZDNN_ZD}}%</span>
+            牛牛炸弹牛--派奖(概率): <span class="rate">{{item.ZDNN_ZD}}%</span>(<span class="count">{{item.ProZDNN_ZD}}‱</span>)
           </li>
           <li v-if="niuniu.includes(item.ServerID)">
-            战斗牛牛五花牛派将百分比: <span class="rate">{{item.ZDNN_WH}}%</span>
+            牛牛五花牛--派奖(概率): <span class="rate">{{item.ZDNN_WH}}%</span>(<span class="count">{{item.ProZDNN_WH}}‱</span>)
+          </li>
+
+          <li v-if="jinhua.includes(item.ServerID)">
+            扎金花AAA--派奖(概率): <span class="rate">{{item.CJAAA}}%</span>(<span class="count">{{item.ProCJ_AAA}}‱</span>)
+          </li>
+
+          <li v-if="jinhua.includes(item.ServerID)">
+            扎金花豹子--派奖(概率): <span class="rate">{{item.CJ_BZ}}%</span>(<span class="count">{{item.ProCJ_BZ}}‱</span>)
           </li>
           <li v-if="jinhua.includes(item.ServerID)">
-            扎金花AAA派将百分比: <span class="rate">{{item.CJAAA}}%</span>
-          </li>
-          <li v-if="jinhua.includes(item.ServerID)">
-            扎金花豹子派将百分比: <span class="rate">{{item.CJ_BZ}}%</span>
-          </li>
-          <li v-if="jinhua.includes(item.ServerID)">
-            扎金花同花顺派将百分比: <span class="rate">{{item.CJ_THS}}%</span>
+            扎金花同花--派奖(概率): <span class="rate">{{item.CJ_THS}}%</span>(<span class="count">{{item.ProCJ_THS}}‱</span>)
           </li>
           <li>
             系统抽水: <span class="line">{{item.SysTax}}</span>%
@@ -37,6 +39,8 @@
           <li v-if="top.includes(item.ServerID)">
             高级场: <span class="line">{{item.AwardTaxNum3|num}}</span>(<span class="count">{{item.AwardTaxNum3_1|num}}</span>)
           </li>
+          <li>定位:<span class="line">{{item.ServerOpenGPS|type}}</span>(<span class="count">{{item.DistanceGPS}}米</span>)</li>
+          <li>概率控制:<span class="line">{{item.IsCardCobtrol|type}}</span></li>
         </ul>
       </div>
     </li>
@@ -49,6 +53,13 @@
     filters:{
       num(value){
         return value/100
+      },
+      type(value){
+        const open={
+          0: '关闭',
+          1: '开启'
+        }
+        return open[value]
       }
     },
     created(){

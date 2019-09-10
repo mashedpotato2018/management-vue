@@ -89,7 +89,7 @@ export function AllScore(data) {
   })
 }
 
-// 是实在线
+// 实时在线
 export function OnLineWater(data) {
   return request({
     url: '/Statistics/OnLineWater',
@@ -98,3 +98,11 @@ export function OnLineWater(data) {
   })
 }
 
+// 每日奖池总计
+export function GetJackpot(data) {
+  return request({
+    url: '/Statistics/GetJackpot',
+    method: 'get',
+    params: data
+  })
+}

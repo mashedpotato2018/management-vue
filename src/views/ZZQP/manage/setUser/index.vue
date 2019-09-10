@@ -10,6 +10,13 @@
             class="filter-item"
             @keyup.enter.native="handleFilter"
           />
+          <el-switch
+            @change ="handleFilter"
+            style="margin: 0 10px"
+            v-model="listQuery.Online"
+            active-text="是否在线"
+          >
+          </el-switch>
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             查询
           </el-button>
@@ -29,24 +36,32 @@
               fixed
               prop="UserID"
               label="用户ID"
-              :filters="[{ text: '在线', value: 1 }]"
+              width="100"
             />
             <el-table-column
               prop="NickName"
               label="昵称"
+              width="200"
             />
             <el-table-column
               prop="HeadImg"
               label="头像"
               align="center"
+              width="200"
             >
               <template slot-scope="scope">
                 <img :src="scope.row.HeadImg" alt="" style="height: 50px;width: auto">
               </template>
             </el-table-column>
             <el-table-column
+              prop="AgentUserID"
+              label="上级代理id"
+              width="100"
+            />
+            <el-table-column
               prop="ServerName"
               label="所在房间"
+              width="180"
               :filters="[
                 { text: '血战', value: 1 },
                 { text: '金花', value: 2 },
@@ -60,6 +75,7 @@
               prop="Score"
               sortable="custom"
               label="银珍珠"
+              width="100"
             >
               <template slot-scope="scope">
                 {{ scope.row.Score/100 | toThousandFilter }}
@@ -69,6 +85,7 @@
               prop="GoldPearl"
               sortable="custom"
               label="金珍珠"
+              width="100"
             >
               <template slot-scope="scope">
                 {{ scope.row.GoldPearl/100 | toThousandFilter }}
@@ -77,6 +94,7 @@
             <el-table-column
               prop="CardPoint"
               sortable="custom"
+              width="100"
               label="房卡"
             >
               <template slot-scope="scope">
@@ -86,6 +104,7 @@
             <el-table-column
               prop="InsureScore"
               sortable="InsureScore"
+              width="100"
               label="银行"
             >
               <template slot-scope="scope">
@@ -104,39 +123,56 @@
             <el-table-column
               fixed="right"
               label="操作"
-              width="350"
+              width="250"
             >
               <template slot-scope="scope">
-                <el-button
-                  v-if="scope.row.RoleMark===1"
-                  size="mini"
-                  type="danger"
-                  @click="handleSetMengZhu(scope.row.UserID)"
-                >
-                  设置盟主
-                </el-button>
-                <el-button
-                  v-if="((scope.row.RoleMark===1&&scope.row.Score<100)||scope.row.RoleMark===3)"
-                  size="mini"
-                  type="success"
-                  @click="handleSetFuMengZhu(scope.row.UserID)"
-                >
-                  设置副盟主
-                </el-button>
-                <el-button
-                  size="mini"
-                  type="primary"
-                  @click="handleUpdate(scope.$index, scope.row)"
-                >
-                  增送
-                </el-button>
-                <el-button
-                  size="mini"
-                  type="warning"
-                  @click="handleBanned(scope.$index, scope.row)"
-                >
-                  封禁
-                </el-button>
+                <ul class="operation">
+                  <li v-if="scope.row.RoleMark===1">
+                    <el-button
+                      size="mini"
+                      type="danger"
+                      @click="handleSetMengZhu(scope.row.UserID)"
+                    >
+                      设置盟主
+                    </el-button>
+                  </li>
+                  <li v-if="((scope.row.RoleMark===1&&scope.row.Score<100)||scope.row.RoleMark===3)">
+                    <el-button
+                      size="mini"
+                      type="success"
+                      @click="handleSetFuMengZhu(scope.row.UserID)"
+                    >
+                      设置副盟主
+                    </el-button>
+                  </li>
+                  <li v-if="$store.getters.roles[0]==='admin'">
+                    <el-button
+                      size="mini"
+                      type="primary"
+                      @click="handleUpdate(scope.$index, scope.row)"
+                    >
+                      增送
+                    </el-button>
+                  </li>
+                  <li>
+                    <el-button
+                      size="mini"
+                      type="danger"
+                      @click="handleBanned(scope.$index, scope.row)"
+                    >
+                      封禁
+                    </el-button>
+                  </li>
+                  <li>
+                    <el-button
+                      size="mini"
+                      type="warning"
+                      @click="handleWhite(scope.$index, scope.row)"
+                    >
+                      白名单
+                    </el-button>
+                  </li>
+                </ul>
               </template>
             </el-table-column>
           </el-table>
@@ -180,20 +216,18 @@
 </template>
 
 <script>
-import { UserList, update, banned, SetMengZhu, SetFuMengZhu } from '@/api/Zzqp/player'
+import { UserList, update, banned, SetMengZhu, SetFuMengZhu,openWhite } from '@/api/Zzqp/player'
 import waves from '@/directive/waves' // waves directive
 import { toThousandFilter } from '@/filters'
-import { parseTime } from '@/utils'
+import { parseTime,DateFormat } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'ComplexTable',
+  name: 'UserList',
   components: { Pagination },
   directives: { waves },
   filters: {
-    DateFormat(str) {
-      return parseInt(str.substr(6, 13))
-    }
+    DateFormat
   },
   data() {
     const valiNumber = (rule, value, callback) => {
@@ -249,12 +283,7 @@ export default {
       this.handleFilter()
     },
     handleFilterChange(filters) {
-      if (filters['el-table_1_column_1'] && filters['el-table_1_column_1'].length) {
-        this.listQuery.Online = true
-      } else {
-        this.listQuery.Online = false
-      }
-      filters['el-table_1_column_4'] && (this.listQuery.KindID = filters['el-table_1_column_4'].map(item => item))
+      this.listQuery.KindID = filters['el-table_1_column_4'].map(item => item)
       this.handleFilter()
     },
     handleSetFuMengZhu(UserID) {
@@ -264,7 +293,7 @@ export default {
         inputPattern: /^\d+$/,
         inputErrorMessage: '数字格式不正确'
       }).then(({ value }) => {
-        SetFuMengZhu({ mengZhuID: value, UserID }).then(res => {
+        SetFuMengZhu({ mengZhuID: value, UserID, username:this.$store.getters.username }).then(res => {
           if (res.code === 20000) {
             this.$notify({
               title: '成功',
@@ -301,6 +330,19 @@ export default {
           })
         }
         this.handleFilter()
+      })
+    },
+    handleWhite(index, row){
+      openWhite({ UserID: row.UserID}).then(res => {
+        if (res.code === 20000) {
+          this.$notify({
+            title: '成功',
+            message: res.Message,
+            type: '成功',
+            duration: 2000
+          })
+          this.$router.push({name:'whitelist'})
+        }
       })
     },
     handleUpdate(index, row) {
@@ -352,7 +394,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
   >>>.el-dialog{
     width: 400px;
   }
@@ -362,5 +404,13 @@ export default {
   .el-form-item{
     display: flex;
     justify-content: space-between;
+  }
+  .operation{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    li{
+      margin: 10px 0;
+    }
   }
 </style>

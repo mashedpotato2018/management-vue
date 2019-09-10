@@ -68,7 +68,8 @@ const viewRouters = [
         path: 'ContributeList',
         component: () => import('@/views/Kxm/Partner/Contribute/'),
         name: 'ContributeList',
-        meta: { title: '合伙人每周贡献', affix: false }
+        meta: { title: '合伙人每周贡献', affix: false },
+        hidden: true
       },
       {
         path: 'ContributeDetail',

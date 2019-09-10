@@ -43,6 +43,33 @@ export function UserList(data) {
   })
 }
 
+//定位白名单
+export function WhiteList(data) {
+  return request({
+    url: '/player/WhiteList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 添加白名单
+export function openWhite(data) {
+  return request({
+    url: '/player/openWhite',
+    method: 'post',
+    data
+  })
+}
+
+// 解除白名单
+export function closeWhite(data) {
+  return request({
+    url: '/player/closeWhite',
+    method: 'post',
+    data
+  })
+}
+
 // 设置数据
 export function update(data) {
   return request({
@@ -83,6 +110,14 @@ export function SetFuMengZhu(data) {
 export function ChangeScoreList(data) {
   return request({
     url: '/player/ChangeScore',
+    method: 'get',
+    params: data
+  })
+}
+
+export function PlayerInfoList(data) {
+  return request({
+    url: '/player/PlayerInfoList',
     method: 'get',
     params: data
   })

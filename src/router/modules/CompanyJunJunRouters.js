@@ -4,7 +4,7 @@ const viewRouters = [
   {
     path: '/',
     component: Layout,
-    meta: { title: '盟主', icon: 'user' },
+    meta: { title: '关系列表', icon: 'user' },
     name: 'alliance',
     redirect: '/alliance/list',
     children: [
@@ -13,6 +13,12 @@ const viewRouters = [
         component: () => import('@/views/ZZQP/alliance/list'),
         name: 'alliance-list',
         meta: { title: '盟主列表' }
+      },
+      {
+        path: '/alliance/playerInfo',
+        component: () => import('@/views/ZZQP/alliance/playerInfo/'),
+        name: 'alliance-playerInfo',
+        meta: { title: '玩家关系列表' }
       },
       {
         path: '/alliance/proxy-list',
@@ -47,7 +53,8 @@ const viewRouters = [
   {
     path: '/proxy',
     component: Layout,
-    meta: { title: '代理', icon: 'tree' },
+    hidden: true,
+    meta: { title: '代理' },
     name: 'proxy',
     redirect: '/proxy/list',
     children: [
@@ -82,14 +89,14 @@ const viewRouters = [
   {
     path: '/Jackpot',
     component: Layout,
-    meta: { title: '奖池',icon: 'Jackpot' },
+    meta: { title: '房间控制', icon: 'Jackpot', roles:['admin'] },
     redirect:'/Jackpot/list',
     children: [
       {
         path: 'list',
         component: () => import('@/views/JunJun/Jackpot/List/'),
         name: 'Jackpot-list',
-        meta: { title: '奖池列表' }
+        meta: { title: '房间列表' }
       },
       {
         path: 'record',
@@ -101,7 +108,7 @@ const viewRouters = [
         path: 'Set',
         component: () => import('@/views/JunJun/Jackpot/Set/'),
         name: 'Jackpot-Set',
-        meta: { title: '设置奖池' },
+        meta: { title: '设置' },
         hidden: true
       }
     ]
@@ -109,7 +116,7 @@ const viewRouters = [
   {
     path: '/account',
     component: Layout,
-    meta: { title: '用户管理', icon: 'bug' },
+    meta: { title: '用户管理', icon: 'bug'},
     name: 'account',
     redirect: '/account/update',
     children: [
@@ -124,6 +131,12 @@ const viewRouters = [
         component: () => import('@/views/ZZQP/manage/blackList'),
         name: 'blacklist',
         meta: { title: '黑名单' }
+      },
+      {
+        path: '/account/whitelist',
+        component: () => import('@/views/ZZQP/manage/whiteList/'),
+        name: 'whitelist',
+        meta: { title: '定位白名单' }
       }
     ]
   },
@@ -131,7 +144,7 @@ const viewRouters = [
     path: '/record',
     redirect: '/record/list',
     component: Layout,
-    meta: { title: '记录查询', icon: 'search' },
+    meta: { title: '记录查询', icon: 'search' , roles:['admin']},
     name: 'record',
     children: [
       {
@@ -169,7 +182,7 @@ const viewRouters = [
   {
     path: '/static',
     component: Layout,
-    meta: { title: '统计', icon: 'chart' },
+    meta: { title: '统计', icon: 'chart', roles:['admin'] },
     name: 'statistics',
     redirect: '/static/GetAddAgent',
     children: [
@@ -196,6 +209,12 @@ const viewRouters = [
         component: () => import('@/views/ZZQP/statistics/Logon'),
         name: 'logon',
         meta: { title: '每日登录' }
+      },
+      {
+        path: 'Jackpot',
+        component: () => import('@/views/ZZQP/statistics/Jackpot'),
+        name: 'Jackpot',
+        meta: { title: '每日奖池' }
       },
       {
         path: 'room',
@@ -244,7 +263,7 @@ const viewRouters = [
   {
     path: '/notice',
     component: Layout,
-    meta: { title: '统计', icon: 'lamp' },
+    meta: { title: '公告', icon: 'lamp' , roles:['admin']},
     redirect: '/notice/lamp',
     children: [
       {

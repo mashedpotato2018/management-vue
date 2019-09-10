@@ -94,7 +94,7 @@
 import { allianceList } from '@/api/Zzqp/alliance'
 import waves from '@/directive/waves' // waves directive
 import { toThousandFilter } from '@/filters'
-import { parseTime } from '@/utils'
+import { parseTime,DateFormat } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -102,9 +102,7 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    DateFormat(str) {
-      return parseInt(str.substr(6, 13))
-    }
+    DateFormat
   },
   data() {
     return {
@@ -115,7 +113,9 @@ export default {
         parentId: 0,
         page: 1,
         limit: 10,
-        keyword: ''
+        keyword: '',
+        username: this.$store.getters.username,
+        roles: this.$store.getters.roles[0]
       },
       downloadLoading: false
     }

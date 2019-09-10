@@ -99,7 +99,7 @@
 import { allianceList } from '@/api/Zzqp/alliance'
 import waves from '@/directive/waves' // waves directive
 import { toThousandFilter } from '@/filters'
-import { parseTime } from '@/utils'
+import { parseTime,DateFormat } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -107,9 +107,7 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    DateFormat(str) {
-      return parseInt(str.substr(6, 13))
-    }
+    DateFormat
   },
   data() {
     return {

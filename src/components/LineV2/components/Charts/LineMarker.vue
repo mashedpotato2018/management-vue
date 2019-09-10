@@ -5,7 +5,7 @@
 <script>
 import echarts from 'echarts'
 import resize from './mixins/resize'
-import { parseTime } from '@/utils'
+import { parseTime,DateFormat } from '@/utils'
 export default {
   mixins: [resize],
   props: {
@@ -39,7 +39,7 @@ export default {
       type: Number,
       default: 100
     },
-    todate: {
+    Todate: {
       type: String,
       default: '{y}-{m}-{d}'
     }
@@ -88,9 +88,7 @@ export default {
     this.chart = null
   },
   methods: {
-    DateFormat(str) {
-      return parseInt(str.substr(6, 13))
-    },
+    DateFormat,
     initChart() {
       this.chart = echarts.init(document.getElementById(this.id))
       const option = {
