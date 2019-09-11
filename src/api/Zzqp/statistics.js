@@ -106,3 +106,12 @@ export function GetJackpot(data) {
     params: data
   })
 }
+
+//每日后台操作
+export function AdminRecord(data) {
+  return request({
+    url: '/Statistics/AdminRecord',
+    method: 'get',
+    params: data
+  })
+}

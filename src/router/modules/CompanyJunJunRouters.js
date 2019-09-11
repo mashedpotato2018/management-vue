@@ -257,6 +257,12 @@ const viewRouters = [
         component: () => import('@/views/ZZQP/statistics/AllScore'),
         name: 'AllScore',
         meta: { title: '每日联盟总珍珠' }
+      },
+      {
+        path: 'AdminRecord',
+        component: () => import('@/views/ZZQP/statistics/AdminRecord'),
+        name: 'AdminRecord',
+        meta: { title: '每日后台操作' }
       }
     ]
   },
